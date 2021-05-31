@@ -1,0 +1,39 @@
+# jemdoc: menu{MENU}{index.html}, showsource, analytics{UA-31107207-1}
+= Jiahui Cheng
+
+~~~
+{}{img_left}{./avatar/avatar.jpg}{Jiahui Cheng}{260px}{260px}
+~~~
+ 
+*Research Interests*: /Computational Math and Statistical Analysis /\n\n I have a broad interest in tackling challenging problems where data are high dimensional. In particular, I am interested in [papersCat.html\#CC {{<font color=red size=+0.5><b>}}Double Descent phenomenon{{</b></font>}}].
+  
+I am currently a first-year graduate student at Georgia Tech, and I am very fortunate to be advised by [https://people.math.gatech.edu/~wliao60/ Wenjing]. Prior to that, I received my bachelor's degree from [https://en.scgy.ustc.edu.cn/ School of Gifted Young] at University of Science and Technology of China (USTC).
+
+*Note*: Click on {{<font color=red size=+0.5><b>}}\[summary\]{{</b></font>}} or {{<font color=red size=+0.5><b>}}\[highlight\]{{</b></font>}} to view summaries or highlight of the papers/projects!
+
+=== Some of my projects:
+
+== *Video/Slides of Recent Work*
+
+== *Selected Publications*
+
+- *Estimate the spectrum of affine dynamical systems from partial observations of a single trajectory data* [https://arxiv.org/abs/2105.02945 \[arxiv\]] {{<span class="title" onclick="toggle('summary-estspec')" style="cursor:pointer; u:hover">
+<font color=red>
+[Summary]
+</font>
+</span><br>
+<span id="summary-estspec" style="display:none; border:1pt solid; padding: 5px; width:800px; background-color:lavender">
+In this paper, we study the nonlinear inverse problem of estimating the spectrum of a system matrix, that drives a 
+finite-dimensional affine dynamical system, from partial observations of a single trajectory data. In the noiseless case, we prove an 
+annihilating polynomial of the system matrix, whose roots are a subset of the spectrum, can be uniquely determined from data. We then 
+study which eigenvalues of the system matrix can be recovered and derive various sufficient and necessary conditions to characterize the
+relationship between the recoverability of each eigenvalue and the observation locations. We propose various reconstruction algorithms,
+with theoretical guarantees, generalizing the classical Prony method, ESPIRIT, and matrix pencil method. We test the algorithms over a 
+variety of examples with applications to graph signal processing, disease modeling and a real-human motion dataset. The numerical 
+results validate our theoretical results and demonstrate the effectiveness of the proposed algorithms, even when the data did not follow 
+an exact linear dynamical system.
+</span>}}
+Jiahui Cheng, Sui Tang\n
+preprint, 2021 \n
+
+== [papersYear.html *Full Publications*]\n
