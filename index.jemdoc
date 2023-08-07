@@ -34,6 +34,21 @@ results validate our theoretical results and demonstrate the effectiveness of th
 an exact linear dynamical system.
 </span>}}
 Jiahui Cheng, Sui Tang\n
-preprint, 2021 \n
+Inverse Problem, 2021 \n
+
+- *Continuum simulation based on Material Point Method* [] {{<span class="title" onclick="toggle('summary-estspec')" style="cursor:pointer; u:hover">
+<font color=red>
+[Summary]
+</font>
+</span><br>
+<span id="summary-estspec" style="display:none; border:1pt solid; padding: 5px; width:800px; background-color:lavender">
+In this thesis, we study the hybrid Eulerian/ Lagrangian Material Point Method (MPM) and propose a new discretization for the weak form 
+of MPM based on the weak form of force balance and alleviated the energy dissipation. We improve the stability and energy dissipation 
+compared with MPM and Affine Particle in Cell method. We implemented a Java Graphical User Interface (GUI) for visualization of our 
+algorithm for snow simulation. 
+
+</span>}}
+Jiahui Cheng\n
+Bachelor’s thesis, 2020 \n
 
 == [papersYear.html *Full Publications*]\n
