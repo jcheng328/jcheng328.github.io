@@ -6,18 +6,16 @@
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <link rel="stylesheet" href="jemdoc.css" type="text/css" />
 <title>Jiahui Cheng</title>
-<!-- MathJax -->
-<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async>
-</script>
-<script type="text/x-mathjax-config">
+        <script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' async>
+        </script>
+        <script type="text/x-mathjax-config">
         MathJax.Hub.Config({
           showProcessingMessages: false,
           TeX: { equationNumbers: { autoNumber: "AMS" } }
         });
-</script>
-<!-- End MathJax -->
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script>
+        </script>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script>
           function toggle(pId) {
             var e=document.getElementById(pId);
             if (!e) return;
@@ -28,7 +26,7 @@
             }
             return;
           }
-</script>
+        </script>
 </head>
 <body>
 <script type="text/javascript">
@@ -49,8 +47,6 @@ try {
 <div class="menu-item"><a href="papersCat.html">Publications&nbsp;(by&nbsp;Categories)</a></div>
 <div class="menu-item"><a href="aboutme.html">About&nbsp;Me</a></div>
 <div class="menu-item"><a href="talks.html">Talks</a></div>
-<div class="menu-item"><a href="projects.html">Projects</a></div>
-<div class="menu-item"><a href="expositions.html">Expositions</a></div>
 </td>
 <td id="layout-content">
 <div id="toptitle">
@@ -69,6 +65,26 @@ try {
 <h2><b>Video/Slides of Recent Work</b></h2>
 <h2><b>Selected Publications</b></h2>
 <ul>
+<li><p><b>Ensemble Dynamics Guided Weak Formulation for Identifying Differential Equations.</b> 
+Jiahui Cheng, Sungha Kang, Haomin Zhou, Wenjing Liao.<br />
+Preprint, 2023 <br />
+</p>
+</li>
+<li><p><b> High Dimensional Binary Classification under Label Shift: Phase Transition and Regularization.</b>
+<a href="https://arxiv.org/abs/2212.00700" target=&ldquo;blank&rdquo;>[arxiv]</a> <span class="title" onclick="toggle('summary-highdim')" style="cursor:pointer; u:hover">
+<font color=red>
+[Summary]
+</font>
+</span><br>
+<span id="summary-highdim" style="display:none; border:1pt solid; padding: 5px; width:800px; background-color:lavender">
+Label Shift has been widely believed to be harmful to the generalization performance of machine learning models. Researchers have proposed many approaches to mitigate the impact of the label shift, e.g., balancing the training data. However, these methods often consider the underparametrized regime, where the sample size is much larger than the data dimension. The research under the overparametrized regime is very limited. To bridge this gap, we propose a new asymptotic analysis of the Fisher Linear Discriminant classifier for binary classification with label shift. Specifically, we prove that there exists a phase transition phenomenon: Under certain overparametrized regime, the classifier trained using imbalanced data outperforms the counterpart with reduced balanced data. Moreover, we investigate the impact of regularization to the label shift: The aforementioned phase transition vanishes as the regularization becomes strong.
+</span>
+Jiahui Cheng, Minshuo Chen, Hao Liu, Tuo Zhao, Wenjing Liao.<br />
+Sampling Theory, Signal Processing, and Data Analysis, 2022 <br />
+</p>
+</li>
+</ul>
+<ul>
 <li><p><b>Estimate the spectrum of affine dynamical systems from partial observations of a single trajectory data</b> <a href="https://arxiv.org/abs/2105.02945" target=&ldquo;blank&rdquo;>[arxiv]</a> <span class="title" onclick="toggle('summary-estspec')" style="cursor:pointer; u:hover">
 <font color=red>
 [Summary]
@@ -86,14 +102,31 @@ results validate our theoretical results and demonstrate the effectiveness of th
 an exact linear dynamical system.
 </span>
 Jiahui Cheng, Sui Tang<br />
-preprint, 2021 <br />
+Inverse Problem, 2021 <br />
+</p>
+</li>
+</ul>
+<ul>
+<li><p><b>Continuum simulation based on Material Point Method</b> <span class="title" onclick="toggle('summary-contsim')" style="cursor:pointer; u:hover">
+<font color=red>
+[Summary]
+</font>
+</span><br>
+<span id="summary-contsim" style="display:none; border:1pt solid; padding: 5px; width:800px; background-color:lavender">
+In this thesis, we study the hybrid Eulerian/ Lagrangian Material Point Method (MPM) and propose a new discretization for the weak form 
+of MPM based on the weak form of force balance and alleviated the energy dissipation. We improve the stability and energy dissipation 
+compared with MPM and Affine Particle in Cell method. We implemented a Java Graphical User Interface (GUI) for visualization of our 
+algorithm for snow simulation. 
+</span>
+Jiahui Cheng, Weihua Tong<br />
+Bachelor’s thesis, 2020 <br />
 </p>
 </li>
 </ul>
 <h2><a href="papersYear.html" target=&ldquo;blank&rdquo;><b>Full Publications</b></a></h2>
 <div id="footer">
 <div id="footer-text">
-Page generated 2021-05-31 14:58:10 CST, by <a href="https://github.com/wsshin/jemdoc_mathjax" target="blank">jemdoc+MathJax</a>.
+Page generated 2023-08-07 13:20:27 EDT, by <a href="https://github.com/wsshin/jemdoc_mathjax" target="blank">jemdoc+MathJax</a>.
 (<a href="index.jemdoc">source</a>)
 </div>
 </div>

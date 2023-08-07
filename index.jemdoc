@@ -16,6 +16,20 @@ I am currently a first-year graduate student at Georgia Tech, and I am very fort
 == *Video/Slides of Recent Work*
 
 == *Selected Publications*
+- *Ensemble Dynamics Guided Weak Formulation for Identifying Differential Equations.* 
+Jiahui Cheng, Sungha Kang, Haomin Zhou, Wenjing Liao.\n
+Preprint, 2023 \n
+- * High Dimensional Binary Classification under Label Shift: Phase Transition and Regularization.*
+[https://arxiv.org/abs/2212.00700 \[arxiv\]] {{<span class="title" onclick="toggle('summary-highdim')" style="cursor:pointer; u:hover">
+<font color=red>
+[Summary]
+</font>
+</span><br>
+<span id="summary-highdim" style="display:none; border:1pt solid; padding: 5px; width:800px; background-color:lavender">
+Label Shift has been widely believed to be harmful to the generalization performance of machine learning models. Researchers have proposed many approaches to mitigate the impact of the label shift, e.g., balancing the training data. However, these methods often consider the underparametrized regime, where the sample size is much larger than the data dimension. The research under the overparametrized regime is very limited. To bridge this gap, we propose a new asymptotic analysis of the Fisher Linear Discriminant classifier for binary classification with label shift. Specifically, we prove that there exists a phase transition phenomenon: Under certain overparametrized regime, the classifier trained using imbalanced data outperforms the counterpart with reduced balanced data. Moreover, we investigate the impact of regularization to the label shift: The aforementioned phase transition vanishes as the regularization becomes strong.
+</span>}}
+Jiahui Cheng, Minshuo Chen, Hao Liu, Tuo Zhao, Wenjing Liao.\n
+Sampling Theory, Signal Processing, and Data Analysis, 2022 \n
 
 - *Estimate the spectrum of affine dynamical systems from partial observations of a single trajectory data* [https://arxiv.org/abs/2105.02945 \[arxiv\]] {{<span class="title" onclick="toggle('summary-estspec')" style="cursor:pointer; u:hover">
 <font color=red>
@@ -36,19 +50,18 @@ an exact linear dynamical system.
 Jiahui Cheng, Sui Tang\n
 Inverse Problem, 2021 \n
 
-- *Continuum simulation based on Material Point Method* [] {{<span class="title" onclick="toggle('summary-estspec')" style="cursor:pointer; u:hover">
+- *Continuum simulation based on Material Point Method* {{<span class="title" onclick="toggle('summary-contsim')" style="cursor:pointer; u:hover">
 <font color=red>
 [Summary]
 </font>
 </span><br>
-<span id="summary-estspec" style="display:none; border:1pt solid; padding: 5px; width:800px; background-color:lavender">
+<span id="summary-contsim" style="display:none; border:1pt solid; padding: 5px; width:800px; background-color:lavender">
 In this thesis, we study the hybrid Eulerian/ Lagrangian Material Point Method (MPM) and propose a new discretization for the weak form 
 of MPM based on the weak form of force balance and alleviated the energy dissipation. We improve the stability and energy dissipation 
 compared with MPM and Affine Particle in Cell method. We implemented a Java Graphical User Interface (GUI) for visualization of our 
 algorithm for snow simulation. 
-
 </span>}}
-Jiahui Cheng\n
+Jiahui Cheng, Weihua Tong\n
 Bachelor’s thesis, 2020 \n
 
 == [papersYear.html *Full Publications*]\n
