@@ -1,28 +1,10 @@
 # jemdoc: menu{MENU}{index.html}, showsource, analytics{UA-31107207-1}
-= Jiahui Cheng
+= Publications (by Years)
 
-~~~
-{}{img_left}{./avatar/avatar.jpg}{Jiahui Cheng}{260px}{260px}
-~~~
- \n
-*Research Interests*: /Computational Math and Statistical Analysis /\n\n I have a broad interest in tackling challenging problems where data are high dimensional. In particular, I am interested in [https://arxiv.org/abs/1903.08560 {{<font color=red size=+0.5><b>}}Double Descent phenomenon{{</b></font>}}].\n
-\n
-I am currently a fourth-year graduate student at Georgia Tech, and I am very fortunate to be advised by [https://people.math.gatech.edu/~wliao60/ Wenjing]. Prior to that, I received my bachelor's degree from [https://en.scgy.ustc.edu.cn/ School of Gifted Young] at University of Science and Technology of China (USTC). \n
-\n
-*Note*: Click on {{<font color=red size=+0.5><b>}}\[summary\]{{</b></font>}} or {{<font color=red size=+0.5><b>}}\[highlight\]{{</b></font>}} to view summaries or highlight of the papers/projects! \n
-\n
-=== Some of my projects:
-
-== *Video/Slides of Recent Work*
-
-== *Selected Publications*
-
-=== PDE Identification
+== 2022
 - *Ensemble Dynamics Guided Weak Formulation for Identifying Differential Equations.* \n
 Jiahui Cheng, Sungha Kang, Haomin Zhou, Wenjing Liao.\n
 Preprint, 2023 \n
-
-=== High Dimensional Statistics
 - * High Dimensional Binary Classification under Label Shift: Phase Transition and Regularization.*
 [https://arxiv.org/abs/2212.00700 \[arxiv\]] {{<span class="title" onclick="toggle('summary-highdim')" style="cursor:pointer; u:hover">
 <font color=red>
@@ -35,7 +17,7 @@ Label Shift has been widely believed to be harmful to the generalization perform
 Jiahui Cheng, Minshuo Chen, Hao Liu, Tuo Zhao, Wenjing Liao.\n
 Sampling Theory, Signal Processing, and Data Analysis, 2022 \n
 
-=== Inverse Problem
+== 2021
 - *Estimate the spectrum of affine dynamical systems from partial observations of a single trajectory data* [https://arxiv.org/abs/2105.02945 \[arxiv\]] {{<span class="title" onclick="toggle('summary-estspec')" style="cursor:pointer; u:hover">
 <font color=red>
 [Summary]
@@ -55,7 +37,7 @@ an exact linear dynamical system.
 Jiahui Cheng, Sui Tang\n
 Inverse Problem, 2021 \n
 
-=== Solids and Fluids Simulation
+== 2020
 - *Continuum simulation based on Material Point Method* {{<span class="title" onclick="toggle('summary-contsim')" style="cursor:pointer; u:hover">
 <font color=red>
 [Summary]
@@ -69,5 +51,3 @@ algorithm for snow simulation.
 </span>}}
 Jiahui Cheng, Weihua Tong\n
 Bachelor's thesis, 2020 \n
-
-== [papersYear.html *Full Publications*]\n
