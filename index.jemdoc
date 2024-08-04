@@ -5,22 +5,33 @@
 {}{img_left}{./avatar/avatar.jpg}{Jiahui Cheng}{260px}{260px}
 ~~~
  \n
-*Research Interests*: /Computational Math and Statistical Analysis /\n\n I have a broad interest in tackling challenging problems where data are high dimensional. In particular, I am interested in [https://arxiv.org/abs/1903.08560 {{<font color=red size=+0.5><b>}}Double Descent phenomenon{{</b></font>}}].\n
+*Research Interests*: /Computational Math and Statistical Analysis, Generative Modeling.   /\n\n I have a broad interest in tackling challenging problems , [https://arxiv.org/abs/2108.08481 {{<font color=red size=+0.5><b>}}Neural Operator Learning{{</b></font>}}], [https://arxiv.org/abs/2007.02848 {{<font color=red size=+0.5><b>}}PDE Identification{{</b></font>}}], and [https://arxiv.org/abs/2303.01469 {{<font color=red size=+0.5><b>}}Diffusion Model Distillation{{</b></font>}}].
+
+My previous interest lies high dimensional problem (e.g., [https://arxiv.org/abs/1903.08560 {{<font color=red size=+0.5><b>}}Double Descent phenomenon{{</b></font>}}]), image-to-image translation (e.g., [https://arxiv.org/abs/1611.07004 {{<font color=red size=+0.5><b>}}Pix2pix{{</b></font>}}], [https://arxiv.org/abs/1703.10593 {{<font color=red size=+0.5><b>}}Cycle GAN{{</b></font>}}]).\n
 \n
-I am currently a fourth-year graduate student at Georgia Tech, and I am very fortunate to be advised by [https://people.math.gatech.edu/~wliao60/ Wenjing]. Prior to that, I received my bachelor's degree from [https://en.scgy.ustc.edu.cn/ School of Gifted Young] at University of Science and Technology of China (USTC). \n
+I am currently a fourth-year graduate student at Georgia Tech, and I am very fortunate to be advised by [https://people.math.gatech.edu/~wliao60/ Wenjing Liao].   Prior to that, I received my bachelor's degree from [https://en.scgy.ustc.edu.cn/ School of Gifted Young] at University of Science and Technology of China (USTC). \n
 \n
 *Note*: Click on {{<font color=red size=+0.5><b>}}\[summary\]{{</b></font>}} or {{<font color=red size=+0.5><b>}}\[highlight\]{{</b></font>}} to view summaries or highlight of the papers/projects! \n
 \n
-=== Some of my projects:
-
-== *Video/Slides of Recent Work*
-
 == *Selected Publications*
 
 === PDE Identification
 - *Ensemble Dynamics Guided Weak Formulation for Identifying Differential Equations.* \n
 Jiahui Cheng, Sungha Kang, Haomin Zhou, Wenjing Liao.\n
 Preprint, 2023 \n
+
+=== Estimation Theory
+- *Deep Neural Networks are Adaptive to Function Regularity and Data Distribution in Approximation and Estimation.* 
+[https://arxiv.org/pdf/2406.05320 \[arxiv\]] {{<span class="title" onclick="toggle('summary-highdim')" style="cursor:pointer; u:hover">
+<font color=red>
+[Summary]
+</font>
+</span><br>
+<span id="summary-highdim" style="display:none; border:1pt solid; padding: 5px; width:800px; background-color:lavender">
+Deep learning has exhibited remarkable results across diverse areas. To understand its success, substantial research has been directed towards its theoretical foundations. Nevertheless, the majority of these studies examine how well deep neural networks can model functions with uniform regularity. In this paper, we explore a different angle: how deep neural networks can adapt to different regularity in functions across different locations and scales and nonuniform data distributions. More precisely, we focus on a broad class of functions defined by nonlinear treebased approximation. This class encompasses a range of function types, such as functions with uniform regularity and discontinuous functions. We develop nonparametric approximation and estimation theories for this function class using deep ReLU networks. Our results show that deep neural networks are adaptive to different regularity of functions and nonuniform data distributions at different locations and scales. We apply our results to several function classes, and derive the corresponding approximation and generalization errors. The validity of our results is demonstrated through numerical experiments.
+</span>}}
+Hao Liu, Jiahui Cheng, Wenjing Liao. \n
+Preprint, 2024 \n
 
 === High Dimensional Statistics
 - * High Dimensional Binary Classification under Label Shift: Phase Transition and Regularization.*
