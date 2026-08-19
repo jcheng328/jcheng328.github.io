@@ -5,14 +5,16 @@
 <meta name="generator" content="jemdoc, see http://jemdoc.jaboc.net/" />
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <link rel="stylesheet" href="jemdoc.css" type="text/css" />
-<title>Jiahui Cheng</title>
-        <script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' async>
+<title>Jiahui Cheng</title>
+        <script>
+          window.MathJax = {
+            tex: { tags: 'ams' },
+            options: { enableMenu: false },
+            startup: { typeset: true }
+          };
         </script>
-        <script type="text/x-mathjax-config">
-        MathJax.Hub.Config({
-          showProcessingMessages: false,
-          TeX: { equationNumbers: { autoNumber: "AMS" } }
-        });
+        <script id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
         </script>
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <script>
@@ -48,109 +50,164 @@ try {
 <div class="menu-item"><a href="teachings.html">Teaching</a></div>
 <div class="menu-item"><a href="refereeservices.html">Referee&nbsp;Services</a></div>
 <div class="menu-item"><a href="workshops.html">Workshops</a></div>
+<div class="menu-category">Writing</div>
+<div class="menu-item"><a href="thoughts.html">Thoughts</a></div>
 </td>
 <td id="layout-content">
 <div id="toptitle">
-<h1>Jiahui Cheng</h1>
+<h1>Jiahui Cheng</h1>
+<div id="subtitle">
+</div>
 </div>
 <table class="imgtable"><tr><td>
 <img src="./avatar/avatar.jpg" alt="Jiahui Cheng" width="260px" height="260px" />&nbsp;</td>
 <td align="left"></td></tr></table>
-<p><b>Research Interests</b>: <i>Computational Math and Statistical Analysis, Generative Modeling.   </i><br /><br /> I have a broad interest in tackling challenging problems , <a href="https://arxiv.org/abs/2108.08481" target=&ldquo;blank&rdquo;><font color=red size=+0.5><b>Neural Operator Learning</b></font></a>, <a href="https://arxiv.org/abs/2007.02848" target=&ldquo;blank&rdquo;><font color=red size=+0.5><b>PDE Identification</b></font></a>, and <a href="https://arxiv.org/abs/2303.01469" target=&ldquo;blank&rdquo;><font color=red size=+0.5><b>Diffusion Model Distillation</b></font></a>.
+<p>I am a <b>Research Scientist</b> at <a href="https://about.meta.com" target=&ldquo;blank&rdquo;>Meta Platforms, Inc.</a>, working on machine learning at production scale.<br />
+<br />
+Before Meta I completed my Ph.D. in Mathematics at the <a href="https://www.math.gatech.edu/" target=&ldquo;blank&rdquo;>Georgia Institute of Technology</a>, where I was very fortunate to be advised by <a href="https://people.math.gatech.edu/~wliao60/" target=&ldquo;blank&rdquo;>Wenjing Liao</a>. I received my bachelor's degree from the <a href="https://en.scgy.ustc.edu.cn/" target=&ldquo;blank&rdquo;>School of the Gifted Young</a> at the University of Science and Technology of China (USTC), where I worked with Weihua Tong on continuum simulation.<br />
+<br />
+My research sits between <i>statistical learning theory</i> and <i>scientific machine learning</i>: I like questions where you can write down what a method is actually estimating, prove something about it, and then watch that proof tell you which knob to turn in practice.<br />
+<br />
+I write up what I read and what I get stuck on over at <a href="thoughts.html" target=&ldquo;blank&rdquo;><b>Thoughts</b></a>.
+
 </p>
-<p>My previous interest lies high dimensional problem (e.g., <a href="https://arxiv.org/abs/1903.08560" target=&ldquo;blank&rdquo;><font color=red size=+0.5><b>Double Descent phenomenon</b></font></a>), image-to-image translation (e.g., <a href="https://arxiv.org/abs/1611.07004" target=&ldquo;blank&rdquo;><font color=red size=+0.5><b>Pix2pix</b></font></a>, <a href="https://arxiv.org/abs/1703.10593" target=&ldquo;blank&rdquo;><font color=red size=+0.5><b>Cycle GAN</b></font></a>).<br />
-<br />
-I am currently a fourth-year graduate student at Georgia Tech, and I am very fortunate to be advised by <a href="https://people.math.gatech.edu/~wliao60/" target=&ldquo;blank&rdquo;>Wenjing Liao</a>.   Prior to that, I received my bachelor's degree from <a href="https://en.scgy.ustc.edu.cn/" target=&ldquo;blank&rdquo;>School of Gifted Young</a> at University of Science and Technology of China (USTC). <br />
-<br />
-<b>Note</b>: Click on <font color=red size=+0.5><b>[summary]</b></font> or <font color=red size=+0.5><b>[highlight]</b></font> to view summaries or highlight of the papers/projects! <br />
-<br />
+<h2>What I Work On</h2>
+<p>
 </p>
-<h2><b>Selected Publications</b></h2>
-<h3>PDE Identification</h3>
+<h3>Why deep networks work as well as they do</h3>
+<p>Most approximation theory for neural networks assumes the target function has one uniform smoothness everywhere, and that data arrive uniformly over the domain. Real signals are not like that: they are smooth in some places, kinked or discontinuous in others, and the data pile up in a few regions and thin out elsewhere. In <a href="https://arxiv.org/pdf/2406.05320" target=&ldquo;blank&rdquo;>recent work</a> we develop approximation and estimation theory for a function class defined by <i>nonlinear tree-based approximation</i>, which is rich enough to contain both uniformly regular and discontinuous functions, and show that deep ReLU networks adapt to varying regularity and to nonuniform data distributions at different locations and scales. The practical reading: the network does not need to be told where the hard parts are.
+
+</p>
+<h3>Learning dynamics from data</h3>
+<p>Given noisy samples of a trajectory, can you recover the equation that produced them? Two things make this hard. Candidate feature libraries need high-order derivatives, and numerical differentiation amplifies noise brutally; and a single trajectory may simply not excite enough of the dynamics to identify it. Our work on <a href="https://arxiv.org/abs/2007.02848" target=&ldquo;blank&rdquo;><font color=red><b>PDE identification</b></font></a> uses weak (integral) formulations to move derivatives off the data and onto smooth test functions, and uses <i>ensemble dynamics</i> &ndash; several trajectories at once &ndash; to condition the resulting regression problem. A related question, on the linear side, is which eigenvalues of a system matrix are recoverable from partial observations of one trajectory, and under exactly what conditions.
+
+</p>
+<h3>Generative modeling, and making it cheap</h3>
+<p>Diffusion models produce beautiful samples and then charge you hundreds of network evaluations for each one. <a href="https://arxiv.org/abs/2303.01469" target=&ldquo;blank&rdquo;><font color=red><b>Distillation</b></font></a> compresses that sampler into a handful of steps, or one. I am interested in what survives that compression and what quietly does not: mode coverage, controllability mid-trajectory, and whether our evaluation metrics are even sensitive to the difference. See <a href="thoughts-distillation.html" target=&ldquo;blank&rdquo;>my notes on this</a>.
+
+</p>
+<h3>High-dimensional phenomena</h3>
+<p>Overparametrized models break the intuitions built in the classical regime. Interpolating models generalize; imbalanced training data can beat balanced data; and the peak in the risk curve that everyone points at turns out to be, largely, a story about missing regularization. I have worked on the <a href="https://arxiv.org/abs/2212.00700" target=&ldquo;blank&rdquo;>label-shift phase transition</a> for high-dimensional binary classification, and I keep coming back to the <a href="https://arxiv.org/abs/1903.08560" target=&ldquo;blank&rdquo;>double descent</a> literature. More in <a href="thoughts-double-descent.html" target=&ldquo;blank&rdquo;>these notes</a>.
+
+</p>
+<h2>Recent</h2>
+<p>
+</p>
 <ul>
-<li><p><b>Ensemble Dynamics Guided Weak Formulation for Identifying Differential Equations.</b> <br />
-Jiahui Cheng, Sungha Kang, Haomin Zhou, Wenjing Liao.<br />
-Preprint, 2023 <br />
+<li><p><b>[MONTH YEAR &ndash; please fill in]</b> &ndash; Joined Meta Platforms, Inc.
+</p>
+</li>
+<li><p><b>[MONTH YEAR &ndash; please fill in]</b> &ndash; Defended my Ph.D. thesis at Georgia Tech.
+</p>
+</li>
+<li><p><b>Aug 2024</b> &ndash; Presented at the ByteDance PhD Research Intern Expo, Bellevue, WA.
+</p>
+</li>
+<li><p><b>Jul 2024</b> &ndash; Attended the NSF CompMath PI Meeting, University of Washington.
+</p>
+</li>
+<li><p><b>Jun 2024</b> &ndash; Preprint on the adaptivity of deep networks to function regularity and data distribution is <a href="https://arxiv.org/pdf/2406.05320" target=&ldquo;blank&rdquo;>on arXiv</a>.
+</p>
+</li>
+<li><p><b>Apr 2024</b> &ndash; Student organizer, Southeast Applied and Computational Math Student Workshop, Georgia Tech.
+
 </p>
 </li>
 </ul>
-<h3>Estimation Theory</h3>
+<h2>Selected Publications</h2>
+<p>
+<b>Note</b>: click <font color=red><b>[Summary]</b></font> to expand a short description of any paper.
+
+</p>
+<h3>Estimation Theory</h3>
 <ul>
-<li><p><b>Deep Neural Networks are Adaptive to Function Regularity and Data Distribution in Approximation and Estimation.</b> 
-<a href="https://arxiv.org/pdf/2406.05320" target=&ldquo;blank&rdquo;>[arxiv]</a> <span class="title" onclick="toggle('summary-highdim')" style="cursor:pointer; u:hover">
-<font color=red>
-[Summary]
-</font>
-</span><br>
-<span id="summary-highdim" style="display:none; border:1pt solid; padding: 5px; width:800px; background-color:lavender">
-Deep learning has exhibited remarkable results across diverse areas. To understand its success, substantial research has been directed towards its theoretical foundations. Nevertheless, the majority of these studies examine how well deep neural networks can model functions with uniform regularity. In this paper, we explore a different angle: how deep neural networks can adapt to different regularity in functions across different locations and scales and nonuniform data distributions. More precisely, we focus on a broad class of functions defined by nonlinear treebased approximation. This class encompasses a range of function types, such as functions with uniform regularity and discontinuous functions. We develop nonparametric approximation and estimation theories for this function class using deep ReLU networks. Our results show that deep neural networks are adaptive to different regularity of functions and nonuniform data distributions at different locations and scales. We apply our results to several function classes, and derive the corresponding approximation and generalization errors. The validity of our results is demonstrated through numerical experiments.
-</span>
-Hao Liu, Jiahui Cheng, Wenjing Liao. <br />
-Preprint, 2024 <br />
+<li><p><b>Deep Neural Networks are Adaptive to Function Regularity and Data Distribution in Approximation and Estimation.</b>
+<a href="https://arxiv.org/pdf/2406.05320" target=&ldquo;blank&rdquo;>[arxiv]</a> <span class="title" onclick="toggle('summary-adaptive')" style="cursor:pointer">
+<font color=red>
+[Summary]
+</font>
+</span><br>
+<span id="summary-adaptive" style="display:none; border:1pt solid; padding: 5px; max-width:800px; background-color:lavender">
+Deep learning has exhibited remarkable results across diverse areas. To understand its success, substantial research has been directed towards its theoretical foundations. Nevertheless, the majority of these studies examine how well deep neural networks can model functions with uniform regularity. In this paper, we explore a different angle: how deep neural networks can adapt to different regularity in functions across different locations and scales and nonuniform data distributions. More precisely, we focus on a broad class of functions defined by nonlinear tree-based approximation. This class encompasses a range of function types, such as functions with uniform regularity and discontinuous functions. We develop nonparametric approximation and estimation theories for this function class using deep ReLU networks. Our results show that deep neural networks are adaptive to different regularity of functions and nonuniform data distributions at different locations and scales. We apply our results to several function classes, and derive the corresponding approximation and generalization errors. The validity of our results is demonstrated through numerical experiments.
+</span>
+Hao Liu, Jiahui Cheng, Wenjing Liao.<br />
+Preprint, 2024 <br />
+
 </p>
 </li>
 </ul>
-<h3>High Dimensional Statistics</h3>
+<h3>PDE Identification</h3>
 <ul>
-<li><p><b> High Dimensional Binary Classification under Label Shift: Phase Transition and Regularization.</b>
-<a href="https://arxiv.org/abs/2212.00700" target=&ldquo;blank&rdquo;>[arxiv]</a> <span class="title" onclick="toggle('summary-highdim')" style="cursor:pointer; u:hover">
-<font color=red>
-[Summary]
-</font>
-</span><br>
-<span id="summary-highdim" style="display:none; border:1pt solid; padding: 5px; width:800px; background-color:lavender">
-Label Shift has been widely believed to be harmful to the generalization performance of machine learning models. Researchers have proposed many approaches to mitigate the impact of the label shift, e.g., balancing the training data. However, these methods often consider the underparametrized regime, where the sample size is much larger than the data dimension. The research under the overparametrized regime is very limited. To bridge this gap, we propose a new asymptotic analysis of the Fisher Linear Discriminant classifier for binary classification with label shift. Specifically, we prove that there exists a phase transition phenomenon: Under certain overparametrized regime, the classifier trained using imbalanced data outperforms the counterpart with reduced balanced data. Moreover, we investigate the impact of regularization to the label shift: The aforementioned phase transition vanishes as the regularization becomes strong.
-</span>
-Jiahui Cheng, Minshuo Chen, Hao Liu, Tuo Zhao, Wenjing Liao.<br />
-Sampling Theory, Signal Processing, and Data Analysis, 2022 <br />
+<li><p><b>Ensemble Dynamics Guided Weak Formulation for Identifying Differential Equations.</b> <span class="title" onclick="toggle('summary-ensemble')" style="cursor:pointer">
+<font color=red>
+[Summary]
+</font>
+</span><br>
+<span id="summary-ensemble" style="display:none; border:1pt solid; padding: 5px; max-width:800px; background-color:lavender">
+Identifying a differential equation from noisy trajectory data requires building a library of candidate terms, which in turn requires estimating high-order derivatives -- an operation that amplifies noise. We use a weak formulation, integrating against compactly supported smooth test functions so that derivatives fall on the test function rather than on the data, and we guide the choice of test functions and sampling regions using an ensemble of trajectories. This improves the conditioning of the resulting sparse regression problem and the robustness of the recovered equation at high noise levels.
+</span>
+Jiahui Cheng, Sungha Kang, Haomin Zhou, Wenjing Liao.<br />
+Preprint, 2023 <br />
+<i>Background reading:</i> <a href="thoughts-weak-form.html" target=&ldquo;blank&rdquo;>Why the weak form beats finite differences</a>.
+
 </p>
 </li>
 </ul>
-<h3>Inverse Problem</h3>
+<h3>High Dimensional Statistics</h3>
 <ul>
-<li><p><b>Estimate the spectrum of affine dynamical systems from partial observations of a single trajectory data</b> <a href="https://arxiv.org/abs/2105.02945" target=&ldquo;blank&rdquo;>[arxiv]</a> <span class="title" onclick="toggle('summary-estspec')" style="cursor:pointer; u:hover">
-<font color=red>
-[Summary]
-</font>
-</span><br>
-<span id="summary-estspec" style="display:none; border:1pt solid; padding: 5px; width:800px; background-color:lavender">
-In this paper, we study the nonlinear inverse problem of estimating the spectrum of a system matrix, that drives a 
-finite-dimensional affine dynamical system, from partial observations of a single trajectory data. In the noiseless case, we prove an 
-annihilating polynomial of the system matrix, whose roots are a subset of the spectrum, can be uniquely determined from data. We then 
-study which eigenvalues of the system matrix can be recovered and derive various sufficient and necessary conditions to characterize the
-relationship between the recoverability of each eigenvalue and the observation locations. We propose various reconstruction algorithms,
-with theoretical guarantees, generalizing the classical Prony method, ESPIRIT, and matrix pencil method. We test the algorithms over a 
-variety of examples with applications to graph signal processing, disease modeling and a real-human motion dataset. The numerical 
-results validate our theoretical results and demonstrate the effectiveness of the proposed algorithms, even when the data did not follow 
-an exact linear dynamical system.
-</span>
-Jiahui Cheng, Sui Tang<br />
-Inverse Problem, 2021 <br />
+<li><p><b>High Dimensional Binary Classification under Label Shift: Phase Transition and Regularization.</b>
+<a href="https://arxiv.org/abs/2212.00700" target=&ldquo;blank&rdquo;>[arxiv]</a> <span class="title" onclick="toggle('summary-labelshift')" style="cursor:pointer">
+<font color=red>
+[Summary]
+</font>
+</span><br>
+<span id="summary-labelshift" style="display:none; border:1pt solid; padding: 5px; max-width:800px; background-color:lavender">
+Label Shift has been widely believed to be harmful to the generalization performance of machine learning models. Researchers have proposed many approaches to mitigate the impact of the label shift, e.g., balancing the training data. However, these methods often consider the underparametrized regime, where the sample size is much larger than the data dimension. The research under the overparametrized regime is very limited. To bridge this gap, we propose a new asymptotic analysis of the Fisher Linear Discriminant classifier for binary classification with label shift. Specifically, we prove that there exists a phase transition phenomenon: Under certain overparametrized regime, the classifier trained using imbalanced data outperforms the counterpart with reduced balanced data. Moreover, we investigate the impact of regularization to the label shift: The aforementioned phase transition vanishes as the regularization becomes strong.
+</span>
+Jiahui Cheng, Minshuo Chen, Hao Liu, Tuo Zhao, Wenjing Liao.<br />
+Sampling Theory, Signal Processing, and Data Analysis, 2022 <br />
+<i>Background reading:</i> <a href="thoughts-double-descent.html" target=&ldquo;blank&rdquo;>Double descent, and what the peak is really telling you</a>.
+
 </p>
 </li>
 </ul>
-<h3>Solids and Fluids Simulation</h3>
+<h3>Inverse Problems</h3>
 <ul>
-<li><p><b>Continuum simulation based on Material Point Method</b> <span class="title" onclick="toggle('summary-contsim')" style="cursor:pointer; u:hover">
-<font color=red>
-[Summary]
-</font>
-</span><br>
-<span id="summary-contsim" style="display:none; border:1pt solid; padding: 5px; width:800px; background-color:lavender">
-In this thesis, we study the hybrid Eulerian/ Lagrangian Material Point Method (MPM) and propose a new discretization for the weak form 
-of MPM based on the weak form of force balance and alleviated the energy dissipation. We improve the stability and energy dissipation 
-compared with MPM and Affine Particle in Cell method. We implemented a Java Graphical User Interface (GUI) for visualization of our 
-algorithm for snow simulation. 
-</span>
-Jiahui Cheng, Weihua Tong<br />
-Bachelor's thesis, 2020 <br />
+<li><p><b>Estimate the spectrum of affine dynamical systems from partial observations of a single trajectory data.</b>
+<a href="https://arxiv.org/abs/2105.02945" target=&ldquo;blank&rdquo;>[arxiv]</a> <span class="title" onclick="toggle('summary-estspec')" style="cursor:pointer">
+<font color=red>
+[Summary]
+</font>
+</span><br>
+<span id="summary-estspec" style="display:none; border:1pt solid; padding: 5px; max-width:800px; background-color:lavender">
+In this paper, we study the nonlinear inverse problem of estimating the spectrum of a system matrix, that drives a finite-dimensional affine dynamical system, from partial observations of a single trajectory data. In the noiseless case, we prove an annihilating polynomial of the system matrix, whose roots are a subset of the spectrum, can be uniquely determined from data. We then study which eigenvalues of the system matrix can be recovered and derive various sufficient and necessary conditions to characterize the relationship between the recoverability of each eigenvalue and the observation locations. We propose various reconstruction algorithms, with theoretical guarantees, generalizing the classical Prony method, ESPIRIT, and matrix pencil method. We test the algorithms over a variety of examples with applications to graph signal processing, disease modeling and a real-human motion dataset. The numerical results validate our theoretical results and demonstrate the effectiveness of the proposed algorithms, even when the data did not follow an exact linear dynamical system.
+</span>
+Jiahui Cheng, Sui Tang.<br />
+Inverse Problems, 2021 <br />
+
 </p>
 </li>
 </ul>
-<h2><a href="papersYear.html" target=&ldquo;blank&rdquo;><b>Full Publications</b></a></h2>
+<h3>Solids and Fluids Simulation</h3>
+<ul>
+<li><p><b>Continuum simulation based on the Material Point Method.</b> <span class="title" onclick="toggle('summary-contsim')" style="cursor:pointer">
+<font color=red>
+[Summary]
+</font>
+</span><br>
+<span id="summary-contsim" style="display:none; border:1pt solid; padding: 5px; max-width:800px; background-color:lavender">
+In this thesis, we study the hybrid Eulerian/Lagrangian Material Point Method (MPM) and propose a new discretization for the weak form of MPM based on the weak form of force balance, alleviating energy dissipation. We improve the stability and energy dissipation compared with MPM and the Affine Particle in Cell method. We implemented a Java Graphical User Interface (GUI) for visualization of our algorithm for snow simulation.
+</span>
+Jiahui Cheng, Weihua Tong.<br />
+Bachelor's thesis, 2020 <br />
+
+</p>
+</li>
+</ul>
+<h2><a href="papersYear.html" target=&ldquo;blank&rdquo;><b>Full Publication List</b></a></h2>
 <div id="footer">
 <div id="footer-text">
-Page generated 2024-08-04 18:35:22 PDT, by <a href="https://github.com/wsshin/jemdoc_mathjax" target="blank">jemdoc+MathJax</a>.
+Page generated 2026-08-19 00:37:15 ??????, by <a href="https://github.com/wsshin/jemdoc_mathjax" target="blank">jemdoc+MathJax</a>.
 (<a href="index.jemdoc">source</a>)
 </div>
 </div>

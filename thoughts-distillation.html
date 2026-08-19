@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta name="generator" content="jemdoc, see http://jemdoc.jaboc.net/" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="stylesheet" href="jemdoc.css" type="text/css" />
+<title>One-step samplers: notes on diffusion distillation</title>
+        <script>
+          window.MathJax = {
+            tex: { tags: 'ams' },
+            options: { enableMenu: false },
+            startup: { typeset: true }
+          };
+        </script>
+        <script id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+        </script>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script>
+          function toggle(pId) {
+            var e=document.getElementById(pId);
+            if (!e) return;
+            if (e.style.display == "none") {
+              e.style.display = "block"
+            } else {
+              e.style.display = "none"
+            }
+            return;
+          }
+        </script>
+</head>
+<body>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+    var pageTracker = _gat._getTracker("UA-31107207-1");
+    pageTracker._trackPageview();
+} catch(err) {}</script>
+<table summary="Table for page layout." id="tlayout">
+<tr valign="top">
+<td id="layout-menu">
+<div class="menu-category">Research</div>
+<div class="menu-item"><a href="index.html">Home</a></div>
+<div class="menu-item"><a href="papersYear.html">Publications&nbsp;(by&nbsp;Years)</a></div>
+<div class="menu-item"><a href="aboutme.html">About&nbsp;Me</a></div>
+<div class="menu-item"><a href="teachings.html">Teaching</a></div>
+<div class="menu-item"><a href="refereeservices.html">Referee&nbsp;Services</a></div>
+<div class="menu-item"><a href="workshops.html">Workshops</a></div>
+<div class="menu-category">Writing</div>
+<div class="menu-item"><a href="thoughts.html" class="current">Thoughts</a></div>
+</td>
+<td id="layout-content">
+<div id="toptitle">
+<h1>One-step samplers: notes on diffusion distillation</h1>
+<div id="subtitle">
+<i>Paper notes. [MONTH] 2026.</i> <br />
+<a href="thoughts.html" target=&ldquo;blank&rdquo;>Back to Thoughts</a>
+
+</div>
+</div>
+<h2>The bill</h2>
+<p>
+A diffusion model is a very good density model attached to a very expensive sampler. Training is a pleasant regression problem &ndash; predict the noise added to a corrupted sample &ndash; but sampling means numerically integrating a differential equation backwards from noise to data, and each integration step is a full forward pass of a large network. Hundreds of steps per sample was normal for a long time. Good solvers brought that down to tens. Distillation asks whether it can be one.
+
+The framing that makes everything else make sense: the trained model defines a <b>probability-flow ODE</b> whose solution trajectories carry noise at \(t=T\) to data at \(t=0\), deterministically. Sampling is solving that ODE. So the question is not &ldquo;how do I generate an image faster&rdquo; but &ldquo;how do I approximate the solution operator of this ODE in fewer evaluations.&rdquo;
+
+Once you phrase it that way, the two main families of methods are obvious in hindsight.
+
+</p>
+<h2>Family one: progressive distillation</h2>
+<p>
+<i>Salimans and Ho, <a href="https://arxiv.org/abs/2202.00512" target=&ldquo;blank&rdquo;>arXiv:2202.00512</a>.</i>
+
+Take a teacher that samples in \(N\) steps. Train a student to reproduce, in one step, what the teacher does in two. Now the student is an \(N/2\)-step sampler. Make it the teacher and repeat. Halve until you run out of steps or patience.
+
+What I like about this is how little it asks of you. There is no adversarial game, no new loss to tune, no separate discriminator. Each round is supervised regression against a target you can compute exactly by running the teacher, and each round is a small enough jump that the student can actually make it. The parameterization matters more than you would expect &ndash; predicting \(\mathbf{x}_0\) directly, rather than the noise, behaves much better as the step count drops, because at large step sizes the noise-prediction parameterization has terrible conditioning.
+
+The cost is that it is a sequence of trainings, not one, and error compounds across rounds. Round \(k\)'s student is imitating round \(k-1\)'s student, not the original model. By the time you are at one or two steps you have played telephone several times.
+
+</p>
+<h2>Family two: consistency models</h2>
+<p>
+<i>Song, Dhariwal, Chen, Sutskever, <a href="https://arxiv.org/abs/2303.01469" target=&ldquo;blank&rdquo;>arXiv:2303.01469</a>.</i>
+
+Instead of halving repeatedly, define the thing you actually want and train for it directly. Let \(f(\mathbf{x}_t, t)\) be a function that maps <i>any</i> point on a probability-flow ODE trajectory to that trajectory's origin at \(t \approx 0\). If you had such an \(f\), sampling would be: draw noise, apply \(f\) once, done.
+
+The property that makes this trainable is <b>self-consistency</b>: if \(\mathbf{x}_t\) and \(\mathbf{x}_{t&rsquo;}\) lie on the same trajectory, then \(f(\mathbf{x}_t, t) = f(\mathbf{x}_{t&rsquo;}, t&rsquo;)\). You cannot enforce this against the true origin, because you do not have it. But you can enforce it between <i>adjacent</i> points: take \(\mathbf{x}_{t_{n+1}}\), run one ODE solver step backwards to get an estimate of \(\mathbf{x}_{t_n}\), and penalize the distance between \(f(\mathbf{x}_{t_{n+1}}, t_{n+1})\) and \(f(\mathbf{x}_{t_n}, t_n)\). Chain enough adjacent constraints together and consistency along the whole trajectory follows.
+
+Two details are load-bearing and neither is decoration:
+
+</p>
+<ul>
+<li><p><b>The target network is an EMA copy of the student.</b> The loss compares the network to itself at a neighboring time, so without a stalled target the whole thing has a trivial fixed point &ndash; output a constant, achieve zero loss. The exponential moving average makes the target lag, which stabilizes training in the same way it does for the target network in Q-learning.
+</p>
+</li>
+<li><p><b>The boundary condition is enforced by construction, not by the loss.</b> The network is parameterized with skip connections so that \(f(\mathbf{x}_\epsilon, \epsilon) = \mathbf{x}_\epsilon\) identically at the smallest time. Without this anchor there is nothing pinning down what &ldquo;the origin&rdquo; means and the consistency constraint alone is satisfied by any constant function.
+
+The elegant part is that this can be run in <i>distillation</i> mode, using a pretrained diffusion model to take the ODE steps, or in <i>isolation</i> mode, training from scratch with a numerical estimate of the score. The second is a genuinely different generative model, not a compression of an existing one.
+
+</p>
+</li>
+</ul>
+<h2>What gets lost</h2>
+<p>
+This is the part I care about and the part the papers, understandably, spend less time on.
+
+<b>Multi-step sampling is not just slow, it is a control surface.</b> When you integrate the ODE over many steps you get to intervene at every one of them: classifier-free guidance with a schedule, inpainting masks reapplied each step, and every other technique that works by nudging the trajectory mid-flight. A one-step sampler has no mid-flight. Some of these can be distilled in &ndash; you can bake a fixed guidance weight into the student &ndash; but &ldquo;bake in a fixed value&rdquo; is not the same capability as &ldquo;adjust at inference time,&rdquo; and pretending otherwise is how you end up with a fast model nobody can use for the actual product.
+
+<b>Distillation is mode-seeking by default.</b> A regression loss against teacher outputs, or a consistency loss between adjacent points, pushes the student toward the conditional mean of what the teacher would do. Where the teacher's output distribution is genuinely multimodal, the mean of the modes is not a mode. In practice distilled models trade diversity for fidelity: individual samples look sharp, the sample <i>set</i> is narrower than the teacher's. Whether that matters depends entirely on what you are building.
+
+<b>And our metrics do not see it clearly.</b> FID compares two sets of Inception features via a Gaussian fit, which means it is sensitive to gross distribution shift but forgiving of a model that has collapsed onto the high-density regions and dropped the tails. A distilled model can post a competitive FID while covering visibly less of the data. Precision/recall for generative models and coverage-style metrics catch more of it, and I think anyone reporting a distilled model should report them. The number that improves is not always the property you wanted.
+
+</p>
+<h2>Where this seems to be heading</h2>
+<p>
+The trend after these two families is toward training the student against a <i>distribution</i> rather than against pointwise teacher outputs &ndash; variational score distillation, distribution matching distillation, and the adversarial variants that add a discriminator on top of a distillation loss. The motivation is exactly the mode-seeking problem above: if you match distributions instead of matching the teacher's per-point answer, you have at least written down an objective that <i>can</i> preserve diversity, rather than one whose optimum destroys it.
+
+That feels like the right correction. It also reintroduces adversarial training, with everything that implies about stability, so it is a correction with a price tag.
+
+</p>
+<h2>The one-line summary</h2>
+<p>
+Distillation is not lossy compression of a sampler; it is lossy compression of a <i>distribution</i>, and the loss function you pick determines which part of the distribution you throw away. Progressive distillation throws away accuracy through telephone. Consistency models throw away controllability. Distribution-matching methods try to throw away less and pay in training stability. There is not yet a free lunch, only a menu.
+
+<a href="thoughts.html" target=&ldquo;blank&rdquo;>Back to Thoughts</a>
+</p>
+<div id="footer">
+<div id="footer-text">
+Page generated 2026-08-18 22:12:11 ??????, by <a href="https://github.com/wsshin/jemdoc_mathjax" target="blank">jemdoc+MathJax</a>.
+(<a href="thoughts-distillation.jemdoc">source</a>)
+</div>
+</div>
+</td>
+</tr>
+</table>
+</body>
+</html>

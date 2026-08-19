@@ -1,3 +1,41 @@
-# jemdoc: menu{MENU}{index.html}, showsource, analytics{UA-31107207-1}
-= Thoughts on Neural Networks Modeling
+# jemdoc: menu{MENU}{thoughts.html}, showsource, analytics{UA-31107207-1}
+= Thoughts
 
+Notes I write mostly to find out whether I actually understand something. Some are paper notes, some are things I got wrong for a long time, some are just stories from graduate school and from the move into industry. Corrections are welcome.
+
+== Posts
+
+=== 2026
+
+- *\[MONTH\] 2026* -- [thoughts-phd-to-industry.html What changed when I left academia] \n
+/experience/ -- The unit of work stopped being a theorem. What transferred, what atrophied, and what I wish someone had told me in year four. \n
+\n
+- *\[MONTH\] 2026* -- [thoughts-distillation.html One-step samplers: notes on diffusion distillation] \n
+/paper notes/ -- Progressive distillation and consistency models, what the self-consistency loss is really enforcing, and the things that quietly get lost when you compress a 1000-step sampler into one. \n
+\n
+- *\[MONTH\] 2026* -- [thoughts-double-descent.html Double descent, and what the peak is really telling you] \n
+/learning notes/ -- The risk curve everyone screenshots, the minimum-norm interpolant behind it, and why optimally tuned ridge regression makes the whole bump disappear. \n
+\n
+- *\[MONTH\] 2026* -- [thoughts-weak-form.html Why the weak form beats finite differences] \n
+/learning notes/ -- Integration by parts as a noise-reduction technique, and the hyperparameter it hands you in exchange. \n
+
+== Currently Reading
+
+A running list. No endorsement implied -- these are just what is open in my tabs.
+
+- Song, Dhariwal, Chen, Sutskever, /Consistency Models/, [https://arxiv.org/abs/2303.01469 arXiv:2303.01469]. Still the cleanest statement of the "map any point on the trajectory back to its origin" idea.
+- Salimans and Ho, /Progressive Distillation for Fast Sampling of Diffusion Models/, [https://arxiv.org/abs/2202.00512 arXiv:2202.00512]. The halving argument is worth working through by hand once.
+- Hastie, Montanari, Rosset, Tibshirani, /Surprises in High-Dimensional Ridgeless Least Squares Interpolation/, [https://arxiv.org/abs/1903.08560 arXiv:1903.08560]. The paper that turned double descent from a picture into asymptotics.
+- Belkin, Hsu, Ma, Mandal, /Reconciling modern machine learning practice and the bias-variance trade-off/, [https://arxiv.org/abs/1812.11118 arXiv:1812.11118].
+- Messenger and Bortz, /Weak SINDy/. The weak-form idea applied to sparse system identification, and the reference I send people to first.
+- Isola, Zhu, Zhou, Efros, /Image-to-Image Translation with Conditional Adversarial Networks/, [https://arxiv.org/abs/1611.07004 arXiv:1611.07004], and Zhu et al., /CycleGAN/, [https://arxiv.org/abs/1703.10593 arXiv:1703.10593]. Older, but I reread these whenever I want to remember what a loss function is for.
+
+== A Few Things I Believe
+
+Loosely held, and I have changed my mind on at least two of these before.
+
+- If a method has a hyperparameter you are not tuning, your experiment is measuring the hyperparameter, not the method.
+- Most "surprising" phenomena in high-dimensional statistics are surprising relative to an intuition built at $n \gg p$, and stop being surprising once you redo the calculation in the right regime.
+- A proof that a method cannot work is worth several weeks of engineering time, and it is almost always cheaper to obtain.
+- Numerical differentiation is a last resort. If you find yourself estimating a fourth derivative from noisy samples, back up and reformulate.
+- Benchmarks measure what is easy to measure. The gap between that and what you care about is where most of the interesting work is.

@@ -1,11 +1,26 @@
-# jemdoc: menu{MENU}{index.html}, showsource, analytics{UA-31107207-1}
+# jemdoc: menu{MENU}{papersYear.html}, showsource, analytics{UA-31107207-1}
 = Publications (by Years)
 
-== 2022
+== 2024
+- *Deep Neural Networks are Adaptive to Function Regularity and Data Distribution in Approximation and Estimation.*
+[https://arxiv.org/pdf/2406.05320 \[arxiv\]] {{<span class="title" onclick="toggle('summary-adaptive')" style="cursor:pointer">
+<font color=red>
+[Summary]
+</font>
+</span><br>
+<span id="summary-adaptive" style="display:none; border:1pt solid; padding: 5px; max-width:800px; background-color:lavender">
+We develop nonparametric approximation and estimation theories for a broad function class defined by nonlinear tree-based approximation, using deep ReLU networks. Our results show that deep neural networks are adaptive to different regularity of functions and to nonuniform data distributions at different locations and scales.
+</span>}}
+Hao Liu, Jiahui Cheng, Wenjing Liao.\n
+Preprint, 2024 \n
+
+== 2023
 - *Ensemble Dynamics Guided Weak Formulation for Identifying Differential Equations.* \n
 Jiahui Cheng, Sungha Kang, Haomin Zhou, Wenjing Liao.\n
 Preprint, 2023 \n
-- * High Dimensional Binary Classification under Label Shift: Phase Transition and Regularization.*
+
+== 2022
+- *High Dimensional Binary Classification under Label Shift: Phase Transition and Regularization.*
 [https://arxiv.org/abs/2212.00700 \[arxiv\]] {{<span class="title" onclick="toggle('summary-highdim')" style="cursor:pointer; u:hover">
 <font color=red>
 [Summary]

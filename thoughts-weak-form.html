@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta name="generator" content="jemdoc, see http://jemdoc.jaboc.net/" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link rel="stylesheet" href="jemdoc.css" type="text/css" />
+<title>Why the weak form beats finite differences</title>
+        <script>
+          window.MathJax = {
+            tex: { tags: 'ams' },
+            options: { enableMenu: false },
+            startup: { typeset: true }
+          };
+        </script>
+        <script id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+        </script>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script>
+          function toggle(pId) {
+            var e=document.getElementById(pId);
+            if (!e) return;
+            if (e.style.display == "none") {
+              e.style.display = "block"
+            } else {
+              e.style.display = "none"
+            }
+            return;
+          }
+        </script>
+</head>
+<body>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+    var pageTracker = _gat._getTracker("UA-31107207-1");
+    pageTracker._trackPageview();
+} catch(err) {}</script>
+<table summary="Table for page layout." id="tlayout">
+<tr valign="top">
+<td id="layout-menu">
+<div class="menu-category">Research</div>
+<div class="menu-item"><a href="index.html">Home</a></div>
+<div class="menu-item"><a href="papersYear.html">Publications&nbsp;(by&nbsp;Years)</a></div>
+<div class="menu-item"><a href="aboutme.html">About&nbsp;Me</a></div>
+<div class="menu-item"><a href="teachings.html">Teaching</a></div>
+<div class="menu-item"><a href="refereeservices.html">Referee&nbsp;Services</a></div>
+<div class="menu-item"><a href="workshops.html">Workshops</a></div>
+<div class="menu-category">Writing</div>
+<div class="menu-item"><a href="thoughts.html" class="current">Thoughts</a></div>
+</td>
+<td id="layout-content">
+<div id="toptitle">
+<h1>Why the weak form beats finite differences</h1>
+<div id="subtitle">
+<i>Learning notes. [MONTH] 2026.</i> <br />
+<a href="thoughts.html" target=&ldquo;blank&rdquo;>Back to Thoughts</a>
+
+</div>
+</div>
+<h2>The setup</h2>
+<p>
+You are handed noisy samples of a solution \(u(x,t)\) on a grid, and you would like to recover the PDE that produced it. The standard recipe is to guess a dictionary of candidate terms and solve a sparse regression problem:
+
+</p>
+<p style="text-align:center">
+\[
+u_t \;=\; \sum_{j=1}^{J} c_j \, f_j\big(u,\, u_x,\, u_{xx},\, \dots\big),
+\]
+</p><p>
+where each \(f_j\) is something like \(u\), \(u^2\), \(u u_x\), \(u_{xxx}\). Build the feature matrix by evaluating every \(f_j\) at every grid point, build the response vector by evaluating \(u_t\) at every grid point, then run a sparsity-promoting solve and read off which \(c_j\) survive. This is the SINDy / PDE-FIND family, and on clean data it works beautifully.
+
+Then you add one percent noise and the whole thing collapses.
+
+</p>
+<h2>Where it collapses</h2>
+<p>
+The failure is entirely in the feature matrix, and it is not subtle. Suppose your measurements are \(\tilde{u} = u + \varepsilon\) with \(\varepsilon\) of size \(\sigma\). A centered finite difference for the first derivative on a grid of spacing \(h\) gives
+
+</p>
+<p style="text-align:center">
+\[
+\frac{\tilde{u}(x+h) - \tilde{u}(x-h)}{2h} \;=\; u_x(x) + O(h^2) + O\!\left(\frac{\sigma}{h}\right).
+\]
+</p><p>
+The truncation error shrinks with \(h\); the noise term <i>grows</i>. For a \(k\)-th derivative the noise term is \(O(\sigma / h^k)\). Estimating a third derivative on a fine grid with any noise at all produces a column of the feature matrix that is essentially pure noise, scaled up enormously.
+
+This has two consequences that compound. The obvious one: the high-derivative columns are wrong. The less obvious one: they are wrong <i>and huge</i>, so the sparse solver, which is comparing coefficient magnitudes, is being fed a design matrix whose columns differ in scale by many orders of magnitude for reasons that have nothing to do with the underlying physics. You are no longer selecting the right terms; you are selecting the least noisy ones.
+
+Refining the grid makes this worse, which is the part that took me an embarrassingly long time to internalize. Every other numerical instinct I had said &ldquo;smaller \(h\), better answer.&rdquo;
+
+</p>
+<h2>The weak form</h2>
+<p>
+The fix is to stop differentiating the data at all.
+
+Pick a test function \(\phi\) that is smooth and compactly supported on some subdomain \(\Omega\). Multiply the equation by \(\phi\) and integrate. For any term involving a spatial derivative, integrate by parts. Because \(\phi\) vanishes on \(\partial\Omega\) along with all its derivatives, every boundary term dies, and you get
+
+</p>
+<p style="text-align:center">
+\[
+\int_{\Omega} \phi \, \partial_x^{k} u \; dx \;=\; (-1)^{k} \int_{\Omega} \big(\partial_x^{k} \phi\big) \, u \; dx .
+\]
+</p><p>
+Read the two sides carefully, because the entire method is in that identity. On the left, you need \(k\) derivatives of \(u\) &ndash; the noisy thing you measured. On the right, you need \(k\) derivatives of \(\phi\) &ndash; a function <i>you chose</i>, which you can differentiate in closed form, exactly, for free. The data now appears undifferentiated, under an integral.
+
+That integral is the second gift. Discretizing it is a quadrature over many grid points, and quadrature averages. If the noise is mean-zero and roughly independent across the \(m\) points in the support of \(\phi\), the noise contribution to the integral shrinks like \(\sigma/\sqrt{m}\) instead of growing like \(\sigma/h^k\). You have swapped an amplification factor for an attenuation factor.
+
+So the linear system becomes: for each test function \(\phi_i\) (translate one bump around to different locations, or use several shapes), one row
+
+</p>
+<p style="text-align:center">
+\[
+\int \phi_i \, u_t \;=\; \sum_j c_j \int \phi_i \, f_j ,
+\]
+</p><p>
+with all derivatives moved onto the \(\phi_i\). Same sparse regression, vastly better conditioned inputs.
+
+</p>
+<h2>What it costs you</h2>
+<p>
+Nothing is free, and the weak form's bill comes due as hyperparameters.
+
+<b>You now have to choose the test functions.</b> The support radius is the important one, and it is a genuine bias-variance trade-off in disguise. A wide support averages over more points and kills more noise, but it also smooths over the features of the solution you were trying to identify &ndash; if the true dynamics have a sharp front and your test function is wider than the front, the front is invisible in every row of your system. A narrow support preserves detail and keeps the noise. There is a real optimum and it depends on both the noise level and the frequency content of \(u\), neither of which you know in advance.
+
+<b>The rows are not independent.</b> Overlapping test functions produce correlated equations. You can write down ten thousand rows and have far less information than the row count suggests, which makes it easy to fool yourself about how well-determined the problem is.
+
+<b>Column scaling still matters.</b> \(\int (\partial_x^3 \phi) u\) and \(\int \phi u\) have different natural magnitudes &ndash; differentiating \(\phi\) three times multiplies its size by roughly the inverse cube of its support radius. If you feed those columns to a sparse solver without normalizing, the solver's notion of &ldquo;small coefficient&rdquo; is meaningless. Normalize the columns, solve, then undo the scaling on the coefficients.
+
+</p>
+<h2>Where ensembles come in</h2>
+<p>
+There is a failure mode the weak form does not touch: a single trajectory may simply not <i>excite</i> the dynamics enough to identify them. If your initial condition happens to sit near a state where two candidate terms behave identically, no amount of clever integration will separate them, because the data contain no evidence that distinguishes them. This is an identifiability problem, not a noise problem.
+
+The response is to use several trajectories from different initial conditions and stack their weak-form rows into one system. Different initial data explore different parts of state space, so terms that were degenerate along one trajectory separate along another. The ensemble also gives you something to use when <i>choosing</i> the test functions: regions where trajectories disagree strongly are regions where the dynamics are informative, and those are the regions worth placing test functions in. That is the idea behind the ensemble-dynamics-guided weak formulation we worked on &ndash; the weak form fixes the noise problem, the ensemble fixes the excitation problem, and the ensemble additionally tells you where to point the weak form.
+
+</p>
+<h2>The transferable lesson</h2>
+<p>
+The thing worth carrying away is not &ldquo;use the weak form for PDE identification.&rdquo; It is that <i>integration by parts is a variance-reduction technique</i>. Any time an estimator requires differentiating noisy data, ask whether there is a formulation in which the derivative lands on something analytic instead. It shows up in finite element methods for the same reason, and in score matching, where the intractable term involving the derivative of an unknown log-density gets integrated by parts into a term involving the derivative of the model &ndash; the thing you can actually differentiate.
+
+Same trick, three fields.
+
+<a href="thoughts.html" target=&ldquo;blank&rdquo;>Back to Thoughts</a>
+</p>
+<div id="footer">
+<div id="footer-text">
+Page generated 2026-08-18 22:12:11 ??????, by <a href="https://github.com/wsshin/jemdoc_mathjax" target="blank">jemdoc+MathJax</a>.
+(<a href="thoughts-weak-form.jemdoc">source</a>)
+</div>
+</div>
+</td>
+</tr>
+</table>
+</body>
+</html>
