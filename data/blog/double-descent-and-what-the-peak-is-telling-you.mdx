@@ -1,0 +1,52 @@
+---
+title: 'Double descent, and what the peak is really telling you'
+date: '2026-05-02'
+tags: ['learning-notes', 'high-dimensional-statistics', 'learning-theory']
+draft: false
+summary: 'The risk curve everyone screenshots, the minimum-norm interpolant behind it, and why optimally tuned ridge regression makes the whole bump disappear.'
+---
+
+## The picture
+
+Everyone has seen the plot. Test error against model size: it falls, then rises to a spike, then falls again, ending up lower than the classical sweet spot ever got. Belkin, Hsu, Ma and Mandal named it double descent and showed it across a range of models ([arXiv:1812.11118](https://arxiv.org/abs/1812.11118)).
+
+The spike sits at the **interpolation threshold**, where the number of parameters $p$ first equals the number of samples $n$ — the smallest model that can fit the training data exactly. Left of it you are in the world every statistics course describes, with a bias-variance U-curve. Right of it you are somewhere those courses said you should never go, and things get better.
+
+I want to write down what I think is actually happening, because for a couple of years I carried around a mystical version of this and it was not useful.
+
+## The peak is a conditioning problem
+
+Take the cleanest case: linear regression with $p$ features and $n$ samples, no explicit regularization, and when $p > n$ take the minimum-$\ell_2$-norm solution among the infinitely many that interpolate. This is ridgeless least squares, and Hastie, Montanari, Rosset and Tibshirani worked out its exact asymptotic risk in the proportional regime where $p/n \to \gamma$ ([arXiv:1903.08560](https://arxiv.org/abs/1903.08560)).
+
+The estimator is $\hat{\beta} = X^{+} y$, and its variance involves the inverse of the sample covariance's nonzero eigenvalues. So the question "why is there a spike at $\gamma = 1$" becomes "what happens to the smallest nonzero eigenvalue of a random $n \times p$ design when $p \approx n$."
+
+The answer is: it goes to zero. In the Marchenko–Pastur limit the spectrum of the sample covariance is supported on an interval whose lower edge is proportional to $(1 - \sqrt{\gamma})^2$, which vanishes exactly at $\gamma = 1$. Near-zero eigenvalues get inverted, the variance blows up, and the risk spikes. That is the whole mechanism. It is not a deep statement about learning; it is the same near-singularity that makes you reach for a pseudo-inverse tolerance in any numerical linear algebra code.
+
+Then why does it come _back down_ past $\gamma = 1$? Because the smallest eigenvalue recovers — with more features than samples, the design is far from square and its nonzero spectrum moves away from zero again. There is also a second effect worth stating separately: with many more parameters than constraints, the minimum-norm requirement has a lot of room to work in, and it can satisfy the interpolation constraints with a small-norm solution that spreads the fit over many directions instead of loading a few. The implicit regularization gets _stronger_ as you add parameters, which is precisely the opposite of the classical intuition and, I think, the genuinely interesting part.
+
+## The fact that reframes the whole thing
+
+Here is the result I wish were on the same slide as the picture, every time:
+
+**With optimally tuned ridge regularization, the peak does not exist.** The risk curve becomes monotone in $\gamma$. Hastie et al. show this directly, and it is not a technicality — it says the spike is an artifact of using zero regularization at the one aspect ratio where zero regularization is catastrophic.
+
+So double descent is less "a surprising new phenomenon of overparametrized learning" and more "a diagnostic image of what happens when you leave a regularization parameter at zero." Which is a considerably less mystical statement, and much more actionable: if you see a bump in your own model-size sweep, your first hypothesis should be that your regularization is not being tuned per model size, not that you have discovered something profound.
+
+The genuinely surprising residue, after you subtract the peak, is still surprising: interpolating estimators can be consistent, and past the threshold bigger keeps being better. Benign overfitting is real. It just is not the same claim as the bump.
+
+## Where my own work touched this
+
+Our label-shift paper ([arXiv:2212.00700](https://arxiv.org/abs/2212.00700)) has the same shape of result, which is why I keep coming back to this literature.
+
+The setup: binary classification with Fisher's linear discriminant, where the two classes appear in the training data with different frequencies. The universal advice is to balance the classes — subsample the majority until the counts match. That advice is derived, almost always, in the underparametrized regime where $n \gg p$.
+
+Redo the asymptotics in the overparametrized regime and there is a phase transition: in a region of the parameter space, the classifier trained on the _imbalanced_ data beats the one trained on balanced-but-smaller data. The reason is not exotic. Balancing throws away samples. When you are already short on samples relative to dimension, discarding data to fix a distributional asymmetry can cost you more than the asymmetry does.
+
+And the second half of that result rhymes exactly with the ridge story above: **the phase transition vanishes as regularization becomes strong.** Same moral, different problem. A surprising regime-dependent effect, and adequate regularization eats it.
+
+## What I actually took away
+
+- Nearly every "paradox" of high-dimensional statistics is a paradox relative to an intuition built at $n \gg p$. The fix is to redo the calculation in the regime you are in, not to invent new intuition.
+- If a phenomenon disappears under optimal regularization, it is a statement about your tuning, not about the world. Say so.
+- Practical advice derived under one aspect ratio should be labelled with that aspect ratio. "Balance your classes" is good advice with a footnote, and the footnote is load-bearing.
+- Random matrix theory is worth the investment. Nearly all of this reduces to knowing what happens to the spectrum of $X^\top X$, and once you have that reflex the surprising results stop being surprising in a way that is satisfying rather than deflating.

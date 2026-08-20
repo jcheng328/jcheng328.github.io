@@ -1,0 +1,77 @@
+---
+title: 'Why the weak form beats finite differences'
+date: '2026-03-14'
+tags: ['learning-notes', 'pde-identification', 'inverse-problems']
+draft: false
+summary: 'Integration by parts as a noise-reduction technique, and the hyperparameter it hands you in exchange.'
+---
+
+## The setup
+
+You are handed noisy samples of a solution $u(x,t)$ on a grid, and you would like to recover the PDE that produced it. The standard recipe is to guess a dictionary of candidate terms and solve a sparse regression problem:
+
+$$
+u_t \;=\; \sum_{j=1}^{J} c_j \, f_j\big(u,\, u_x,\, u_{xx},\, \dots\big),
+$$
+
+where each $f_j$ is something like $u$, $u^2$, $u u_x$, $u_{xxx}$. Build the feature matrix by evaluating every $f_j$ at every grid point, build the response vector by evaluating $u_t$ at every grid point, then run a sparsity-promoting solve and read off which $c_j$ survive. This is the SINDy / PDE-FIND family, and on clean data it works beautifully.
+
+Then you add one percent noise and the whole thing collapses.
+
+## Where it collapses
+
+The failure is entirely in the feature matrix, and it is not subtle. Suppose your measurements are $\tilde{u} = u + \varepsilon$ with $\varepsilon$ of size $\sigma$. A centered finite difference for the first derivative on a grid of spacing $h$ gives
+
+$$
+\frac{\tilde{u}(x+h) - \tilde{u}(x-h)}{2h} \;=\; u_x(x) + O(h^2) + O\!\left(\frac{\sigma}{h}\right).
+$$
+
+The truncation error shrinks with $h$; the noise term _grows_. For a $k$-th derivative the noise term is $O(\sigma / h^k)$. Estimating a third derivative on a fine grid with any noise at all produces a column of the feature matrix that is essentially pure noise, scaled up enormously.
+
+This has two consequences that compound. The obvious one: the high-derivative columns are wrong. The less obvious one: they are wrong _and huge_, so the sparse solver, which is comparing coefficient magnitudes, is being fed a design matrix whose columns differ in scale by many orders of magnitude for reasons that have nothing to do with the underlying physics. You are no longer selecting the right terms; you are selecting the least noisy ones.
+
+Refining the grid makes this worse, which is the part that took me an embarrassingly long time to internalize. Every other numerical instinct I had said "smaller $h$, better answer."
+
+## The weak form
+
+The fix is to stop differentiating the data at all.
+
+Pick a test function $\phi$ that is smooth and compactly supported on some subdomain $\Omega$. Multiply the equation by $\phi$ and integrate. For any term involving a spatial derivative, integrate by parts. Because $\phi$ vanishes on $\partial\Omega$ along with all its derivatives, every boundary term dies, and you get
+
+$$
+\int_{\Omega} \phi \, \partial_x^{k} u \; dx \;=\; (-1)^{k} \int_{\Omega} \big(\partial_x^{k} \phi\big) \, u \; dx .
+$$
+
+Read the two sides carefully, because the entire method is in that identity. On the left, you need $k$ derivatives of $u$ — the noisy thing you measured. On the right, you need $k$ derivatives of $\phi$ — a function _you chose_, which you can differentiate in closed form, exactly, for free. The data now appears undifferentiated, under an integral.
+
+That integral is the second gift. Discretizing it is a quadrature over many grid points, and quadrature averages. If the noise is mean-zero and roughly independent across the $m$ points in the support of $\phi$, the noise contribution to the integral shrinks like $\sigma/\sqrt{m}$ instead of growing like $\sigma/h^k$. You have swapped an amplification factor for an attenuation factor.
+
+So the linear system becomes: for each test function $\phi_i$ (translate one bump around to different locations, or use several shapes), one row
+
+$$
+\int \phi_i \, u_t \;=\; \sum_j c_j \int \phi_i \, f_j ,
+$$
+
+with all derivatives moved onto the $\phi_i$. Same sparse regression, vastly better conditioned inputs.
+
+## What it costs you
+
+Nothing is free, and the weak form's bill comes due as hyperparameters.
+
+**You now have to choose the test functions.** The support radius is the important one, and it is a genuine bias-variance trade-off in disguise. A wide support averages over more points and kills more noise, but it also smooths over the features of the solution you were trying to identify — if the true dynamics have a sharp front and your test function is wider than the front, the front is invisible in every row of your system. A narrow support preserves detail and keeps the noise. There is a real optimum and it depends on both the noise level and the frequency content of $u$, neither of which you know in advance.
+
+**The rows are not independent.** Overlapping test functions produce correlated equations. You can write down ten thousand rows and have far less information than the row count suggests, which makes it easy to fool yourself about how well-determined the problem is.
+
+**Column scaling still matters.** $\int (\partial_x^3 \phi) u$ and $\int \phi u$ have different natural magnitudes — differentiating $\phi$ three times multiplies its size by roughly the inverse cube of its support radius. If you feed those columns to a sparse solver without normalizing, the solver's notion of "small coefficient" is meaningless. Normalize the columns, solve, then undo the scaling on the coefficients.
+
+## Where ensembles come in
+
+There is a failure mode the weak form does not touch: a single trajectory may simply not _excite_ the dynamics enough to identify them. If your initial condition happens to sit near a state where two candidate terms behave identically, no amount of clever integration will separate them, because the data contain no evidence that distinguishes them. This is an identifiability problem, not a noise problem.
+
+The response is to use several trajectories from different initial conditions and stack their weak-form rows into one system. Different initial data explore different parts of state space, so terms that were degenerate along one trajectory separate along another. The ensemble also gives you something to use when _choosing_ the test functions: regions where trajectories disagree strongly are regions where the dynamics are informative, and those are the regions worth placing test functions in. That is the idea behind the ensemble-dynamics-guided weak formulation we worked on — the weak form fixes the noise problem, the ensemble fixes the excitation problem, and the ensemble additionally tells you where to point the weak form.
+
+## The transferable lesson
+
+The thing worth carrying away is not "use the weak form for PDE identification." It is that _integration by parts is a variance-reduction technique_. Any time an estimator requires differentiating noisy data, ask whether there is a formulation in which the derivative lands on something analytic instead. It shows up in finite element methods for the same reason, and in score matching, where the intractable term involving the derivative of an unknown log-density gets integrated by parts into a term involving the derivative of the model — the thing you can actually differentiate.
+
+Same trick, three fields.

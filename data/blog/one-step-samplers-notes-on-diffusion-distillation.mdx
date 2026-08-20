@@ -1,0 +1,60 @@
+---
+title: 'One-step samplers: notes on diffusion distillation'
+date: '2026-06-20'
+tags: ['paper-notes', 'diffusion-models', 'generative-modeling']
+draft: false
+summary: 'Progressive distillation and consistency models, what the self-consistency loss is really enforcing, and the things that quietly get lost when you compress a 1000-step sampler into one.'
+---
+
+## The bill
+
+A diffusion model is a very good density model attached to a very expensive sampler. Training is a pleasant regression problem — predict the noise added to a corrupted sample — but sampling means numerically integrating a differential equation backwards from noise to data, and each integration step is a full forward pass of a large network. Hundreds of steps per sample was normal for a long time. Good solvers brought that down to tens. Distillation asks whether it can be one.
+
+The framing that makes everything else make sense: the trained model defines a **probability-flow ODE** whose solution trajectories carry noise at $t=T$ to data at $t=0$, deterministically. Sampling is solving that ODE. So the question is not "how do I generate an image faster" but "how do I approximate the solution operator of this ODE in fewer evaluations."
+
+Once you phrase it that way, the two main families of methods are obvious in hindsight.
+
+## Family one: progressive distillation
+
+_Salimans and Ho, [arXiv:2202.00512](https://arxiv.org/abs/2202.00512)._
+
+Take a teacher that samples in $N$ steps. Train a student to reproduce, in one step, what the teacher does in two. Now the student is an $N/2$-step sampler. Make it the teacher and repeat. Halve until you run out of steps or patience.
+
+What I like about this is how little it asks of you. There is no adversarial game, no new loss to tune, no separate discriminator. Each round is supervised regression against a target you can compute exactly by running the teacher, and each round is a small enough jump that the student can actually make it. The parameterization matters more than you would expect — predicting $\mathbf{x}_0$ directly, rather than the noise, behaves much better as the step count drops, because at large step sizes the noise-prediction parameterization has terrible conditioning.
+
+The cost is that it is a sequence of trainings, not one, and error compounds across rounds. Round $k$'s student is imitating round $k-1$'s student, not the original model. By the time you are at one or two steps you have played telephone several times.
+
+## Family two: consistency models
+
+_Song, Dhariwal, Chen, Sutskever, [arXiv:2303.01469](https://arxiv.org/abs/2303.01469)._
+
+Instead of halving repeatedly, define the thing you actually want and train for it directly. Let $f(\mathbf{x}_t, t)$ be a function that maps _any_ point on a probability-flow ODE trajectory to that trajectory's origin at $t \approx 0$. If you had such an $f$, sampling would be: draw noise, apply $f$ once, done.
+
+The property that makes this trainable is **self-consistency**: if $\mathbf{x}_t$ and $\mathbf{x}_{t'}$ lie on the same trajectory, then $f(\mathbf{x}_t, t) = f(\mathbf{x}_{t'}, t')$. You cannot enforce this against the true origin, because you do not have it. But you can enforce it between _adjacent_ points: take $\mathbf{x}_{t_{n+1}}$, run one ODE solver step backwards to get an estimate of $\mathbf{x}_{t_n}$, and penalize the distance between $f(\mathbf{x}_{t_{n+1}}, t_{n+1})$ and $f(\mathbf{x}_{t_n}, t_n)$. Chain enough adjacent constraints together and consistency along the whole trajectory follows.
+
+Two details are load-bearing and neither is decoration:
+
+- **The target network is an EMA copy of the student.** The loss compares the network to itself at a neighboring time, so without a stalled target the whole thing has a trivial fixed point — output a constant, achieve zero loss. The exponential moving average makes the target lag, which stabilizes training in the same way it does for the target network in Q-learning.
+- **The boundary condition is enforced by construction, not by the loss.** The network is parameterized with skip connections so that $f(\mathbf{x}_\epsilon, \epsilon) = \mathbf{x}_\epsilon$ identically at the smallest time. Without this anchor there is nothing pinning down what "the origin" means, and the consistency constraint alone is satisfied by any constant function.
+
+The elegant part is that this can be run in _distillation_ mode, using a pretrained diffusion model to take the ODE steps, or in _isolation_ mode, training from scratch with a numerical estimate of the score. The second is a genuinely different generative model, not a compression of an existing one.
+
+## What gets lost
+
+This is the part I care about and the part the papers, understandably, spend less time on.
+
+**Multi-step sampling is not just slow, it is a control surface.** When you integrate the ODE over many steps you get to intervene at every one of them: classifier-free guidance with a schedule, inpainting masks reapplied each step, and every other technique that works by nudging the trajectory mid-flight. A one-step sampler has no mid-flight. Some of these can be distilled in — you can bake a fixed guidance weight into the student — but "bake in a fixed value" is not the same capability as "adjust at inference time," and pretending otherwise is how you end up with a fast model nobody can use for the actual product.
+
+**Distillation is mode-seeking by default.** A regression loss against teacher outputs, or a consistency loss between adjacent points, pushes the student toward the conditional mean of what the teacher would do. Where the teacher's output distribution is genuinely multimodal, the mean of the modes is not a mode. In practice distilled models trade diversity for fidelity: individual samples look sharp, the sample _set_ is narrower than the teacher's. Whether that matters depends entirely on what you are building.
+
+**And our metrics do not see it clearly.** FID compares two sets of Inception features via a Gaussian fit, which means it is sensitive to gross distribution shift but forgiving of a model that has collapsed onto the high-density regions and dropped the tails. A distilled model can post a competitive FID while covering visibly less of the data. Precision/recall for generative models and coverage-style metrics catch more of it, and I think anyone reporting a distilled model should report them. The number that improves is not always the property you wanted.
+
+## Where this seems to be heading
+
+The trend after these two families is toward training the student against a _distribution_ rather than against pointwise teacher outputs — variational score distillation, distribution matching distillation, and the adversarial variants that add a discriminator on top of a distillation loss. The motivation is exactly the mode-seeking problem above: if you match distributions instead of matching the teacher's per-point answer, you have at least written down an objective that _can_ preserve diversity, rather than one whose optimum destroys it.
+
+That feels like the right correction. It also reintroduces adversarial training, with everything that implies about stability, so it is a correction with a price tag.
+
+## The one-line summary
+
+Distillation is not lossy compression of a sampler; it is lossy compression of a _distribution_, and the loss function you pick determines which part of the distribution you throw away. Progressive distillation throws away accuracy through telephone. Consistency models throw away controllability. Distribution-matching methods try to throw away less and pay in training stability. There is not yet a free lunch, only a menu.
