@@ -17,53 +17,55 @@ export default function Home({ posts }: { posts: CoreContent<Blog>[] }) {
             models, and on machine learning theory with data-driven methods.
           </p>
           <p>
-            These are learning notes — what I understand well enough to explain, and what looks
-            worth exploring next.
+            More <Link href="/about">about me</Link>.
           </p>
         </div>
       </div>
 
-      {/* The original open list: date in its own column, rules between entries,
-          no boxes — just tightened up and without tags. */}
-      <ul className="divide-y divide-gray-200 dark:divide-gray-700">
-        {!posts.length && 'No posts found.'}
-        {posts.map((post) => {
-          const { slug, date, title, summary } = post
-          return (
-            <li key={slug} className="py-6">
-              <article className="space-y-2 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
-                <dl>
-                  <dt className="sr-only">Published on</dt>
-                  <dd className="text-base leading-6 font-medium text-gray-500 dark:text-gray-400">
-                    <time dateTime={date}>{formatDate(date, siteMetadata.locale)}</time>
-                  </dd>
-                </dl>
-                <div className="space-y-2 xl:col-span-3">
-                  <h2 className="text-2xl leading-8 font-bold tracking-tight">
-                    <Link href={`/blog/${slug}`} className="text-gray-900 dark:text-gray-100">
-                      {title}
-                    </Link>
-                  </h2>
-                  {summary && (
-                    <div className="prose max-w-none text-gray-500 dark:text-gray-400">
-                      {summary}
+      {/* Nothing is published yet, so the list stays hidden rather than showing
+          an empty state. Note that restoring posts also needs the /blog and
+          /tags routes back — a static export cannot build a dynamic route with
+          no params, so they were removed alongside the posts. */}
+      {posts.length > 0 && (
+        <ul className="divide-y divide-gray-200 dark:divide-gray-700">
+          {posts.map((post) => {
+            const { slug, date, title, summary } = post
+            return (
+              <li key={slug} className="py-6">
+                <article className="space-y-2 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
+                  <dl>
+                    <dt className="sr-only">Published on</dt>
+                    <dd className="text-base leading-6 font-medium text-gray-500 dark:text-gray-400">
+                      <time dateTime={date}>{formatDate(date, siteMetadata.locale)}</time>
+                    </dd>
+                  </dl>
+                  <div className="space-y-2 xl:col-span-3">
+                    <h2 className="text-2xl leading-8 font-bold tracking-tight">
+                      <Link href={`/blog/${slug}`} className="text-gray-900 dark:text-gray-100">
+                        {title}
+                      </Link>
+                    </h2>
+                    {summary && (
+                      <div className="prose max-w-none text-gray-500 dark:text-gray-400">
+                        {summary}
+                      </div>
+                    )}
+                    <div className="text-base leading-6 font-medium">
+                      <Link
+                        href={`/blog/${slug}`}
+                        className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+                        aria-label={`Read more: "${title}"`}
+                      >
+                        Read more &rarr;
+                      </Link>
                     </div>
-                  )}
-                  <div className="text-base leading-6 font-medium">
-                    <Link
-                      href={`/blog/${slug}`}
-                      className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
-                      aria-label={`Read more: "${title}"`}
-                    >
-                      Read more &rarr;
-                    </Link>
                   </div>
-                </div>
-              </article>
-            </li>
-          )
-        })}
-      </ul>
+                </article>
+              </li>
+            )
+          })}
+        </ul>
+      )}
     </div>
   )
 }
