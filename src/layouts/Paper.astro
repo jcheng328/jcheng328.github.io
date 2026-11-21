@@ -1,0 +1,11 @@
+---
+const { paper } = Astro.props;
+---
+<article>
+  <span class="venue">{paper.venue}</span>
+  <div>
+    <a href={paper.url}><strong>{paper.title}</strong></a>
+    <p>{paper.authors}</p>
+    {paper.blog && <p><a href={paper.blog}>Blog</a></p>}
+  </div>
+</article>

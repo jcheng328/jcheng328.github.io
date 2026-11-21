@@ -1,0 +1,16 @@
+---
+import Site from "../layouts/Site.astro";
+import Paper from "../layouts/Paper.astro";
+import profile from "../data/profile.json";
+const years = [...new Set(profile.papers.map((paper) => paper.year))].sort((a, b) => b - a);
+---
+<Site title="Papers">
+  <h1>Papers</h1>
+  {years.length === 0 && <p>No publications are listed here yet.</p>}
+  {years.map((year) => (
+    <section aria-labelledby={`year-${year}`}>
+      <h2 id={`year-${year}`}>{year}</h2>
+      {profile.papers.filter((paper) => paper.year === year).map((paper) => <Paper paper={paper} />)}
+    </section>
+  ))}
+</Site>

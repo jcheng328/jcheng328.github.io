@@ -1,0 +1,48 @@
+---
+import profile from "../data/profile.json";
+const { title } = Astro.props;
+const papersPage = Astro.url.pathname.startsWith("/papers");
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} | {profile.name}</title>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="site-header">
+      <a class="brand" href="/">{profile.name}</a>
+      <nav aria-label="Main navigation">
+        <a href="/" aria-current={!papersPage ? "page" : undefined}>Home</a>
+        <a href="/papers/" aria-current={papersPage ? "page" : undefined}>Papers</a>
+        <a href="https://github.com/jcheng49f">GitHub</a>
+      </nav>
+    </header>
+    <main id="main"><slot /></main>
+  </body>
+</html>
+<style is:global>
+  :root { color-scheme: light; background: #f4f8f7; color: #173332; font: 17px/1.65 system-ui, sans-serif; }
+  body { margin: 0; }
+  a { color: #136a60; text-underline-offset: .22em; }
+  a:focus-visible { outline: 2px solid #136a60; outline-offset: 4px; }
+  .skip { position: absolute; left: 1rem; top: -6rem; background: white; padding: .5rem; }
+  .skip:focus { top: 1rem; }
+  .site-header, main { width: min(46rem, calc(100% - 3rem)); margin-inline: auto; }
+  .site-header { display: flex; flex-wrap: wrap; gap: .6rem 1.5rem; align-items: center; justify-content: space-between; padding-block: 1.1rem; border-bottom: 1px solid #b8d2cd; }
+  .brand { font-weight: 750; color: inherit; text-decoration: none; }
+  nav { display: flex; gap: 1.1rem; font-size: .92rem; }
+  nav a { text-decoration: none; }
+  nav a:hover, nav a[aria-current] { text-decoration: underline; }
+  main { padding-block: clamp(2rem, 7vw, 5rem); }
+  h1, h2 { font-family: Georgia, serif; line-height: 1.15; }
+  h1 { font-size: clamp(2.8rem, 9vw, 5rem); margin: 0 0 1rem; letter-spacing: -.04em; font-weight: normal; }
+  h2 { font-size: 1.6rem; }
+  section { margin-block: 2.5rem; }
+  article { display: grid; grid-template-columns: 6rem 1fr; gap: .25rem 1rem; border-top: 1px solid #b8d2cd; padding-block: 1rem; }
+  article p { margin: .35rem 0 0; }
+  .venue { font-size: .9rem; }
+  @media (max-width: 480px) { article { grid-template-columns: 1fr; } }
+</style>

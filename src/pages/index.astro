@@ -1,0 +1,17 @@
+---
+import Site from "../layouts/Site.astro";
+import Paper from "../layouts/Paper.astro";
+import profile from "../data/profile.json";
+const selected = profile.papers.filter((paper) => paper.featured).sort((a, b) => b.year - a.year);
+---
+<Site title="Home">
+  <h1>{profile.name}</h1>
+  {profile.bio && <p>{profile.bio}</p>}
+  {selected.length > 0 && (
+    <section>
+      <h2>Selected papers</h2>
+      {selected.map((paper) => <Paper paper={paper} />)}
+    </section>
+  )}
+  <p><a href="/papers/">Browse publications</a></p>
+</Site>
