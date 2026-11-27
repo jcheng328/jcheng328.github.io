@@ -12,6 +12,12 @@ const selected = profile.papers.filter((paper) => paper.featured).sort((a, b) =>
     <div class="profile-content">
       <h1>{profile.name}</h1>
       <p>{profile.bio}</p>
+      <p>
+        I worked at {profile.industry.employer} in China from {profile.industry.dates},
+        where I contributed to one of the
+        <a href={profile.industry.writeup}>{profile.industry.project}</a>
+        featured in ByteDance's technical write-up.
+      </p>
       <p class="profile-links">
         <a href={profile.github}>GitHub</a>
         <span aria-hidden="true"> / </span>

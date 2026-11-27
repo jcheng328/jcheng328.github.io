@@ -4,6 +4,12 @@
   "portrait": "https://avatars.githubusercontent.com/u/29350499?v=4&s=384",
   "bio": "I completed my PhD in Computational Science and Engineering at Georgia Tech. My doctoral research focused on data-driven discovery of differential equations, binary classification, and dynamical systems. Before Georgia Tech, I studied computing and applied mathematics at the University of Science and Technology of China.",
   "dissertation": "https://repository.gatech.edu/entities/publication/be49532c-8d80-499e-b45a-5796f3db551b",
+  "industry": {
+    "employer": "ByteDance (Douyin)",
+    "dates": "August 2020 to August 2021",
+    "project": "Lunar New Year video effects",
+    "writeup": "https://zhuanlan.zhihu.com/p/354132633"
+  },
   "papers": [
     {
       "title": "Identification of Differential Equations by Dynamics-Guided Weighted Weak Form with Voting",
