@@ -1,11 +1,23 @@
 ---
-const { paper } = Astro.props;
+const { paper, compact = false } = Astro.props;
+const dateLabel = paper.date
+  ? new Intl.DateTimeFormat("en", { month: "short", year: "numeric", timeZone: "UTC" })
+      .format(new Date(`${paper.date}-01T00:00:00Z`))
+  : String(paper.year);
 ---
-<article>
-  <span class="venue">{paper.venue}</span>
+<article class="paper">
+  <div class="paper-meta">
+    {compact ? <time datetime={paper.date ?? String(paper.year)}>{dateLabel}</time> : paper.venue}
+  </div>
   <div>
-    <a href={paper.url}><strong>{paper.title}</strong></a>
-    <p>{paper.authors}</p>
-    {paper.blog && <p><a href={paper.blog}>Blog</a></p>}
+    <a class="paper-title" href={paper.url}>{paper.title}</a>
+    {!compact && <p class="paper-authors">{paper.authors}</p>}
+    {!compact && (paper.preprint || paper.blog) && (
+      <p class="paper-links">
+        {paper.preprint && <a href={paper.preprint}>arXiv</a>}
+        {paper.preprint && paper.blog && " / "}
+        {paper.blog && <a href={paper.blog}>Blog</a>}
+      </p>
+    )}
   </div>
 </article>

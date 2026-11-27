@@ -2,16 +2,42 @@
 import Site from "../layouts/Site.astro";
 import Paper from "../layouts/Paper.astro";
 import profile from "../data/profile.json";
+
+const papersUrl = import.meta.env.BASE_URL.replace(/\/?$/, "/") + "papers/";
 const selected = profile.papers.filter((paper) => paper.featured).sort((a, b) => b.year - a.year);
 ---
 <Site title="Home">
-  <h1>{profile.name}</h1>
-  {profile.bio && <p>{profile.bio}</p>}
-  {selected.length > 0 && (
-    <section>
-      <h2>Selected papers</h2>
-      {selected.map((paper) => <Paper paper={paper} />)}
-    </section>
-  )}
-  <p><a href="/papers/">Browse publications</a></p>
+  <div class="profile">
+    <img class="portrait" src={profile.portrait} width="184" height="184" alt="" />
+    <div class="profile-content">
+      <h1>{profile.name}</h1>
+      <p>{profile.bio}</p>
+      <p class="profile-links">
+        <a href={profile.github}>GitHub</a>
+        <span aria-hidden="true"> / </span>
+        <a href={profile.dissertation}>Dissertation</a>
+      </p>
+      {selected.length > 0 && (
+        <section aria-labelledby="selected-papers">
+          <h2 id="selected-papers">Selected papers</h2>
+          {selected.map((paper) => <Paper paper={paper} compact />)}
+          <p class="all-papers"><a href={papersUrl}>All papers</a></p>
+        </section>
+      )}
+    </div>
+  </div>
 </Site>
+
+<style>
+  .profile { display: grid; grid-template-columns: 10.8rem minmax(0, 1fr); gap: 2.6rem; }
+  .portrait { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; }
+  .profile-content > p { max-width: 34rem; }
+  .profile-links { margin-top: 1rem; }
+  section { margin-top: 2.25rem; --paper-label-width: 4.4rem; }
+  .all-papers { margin-top: 1rem; }
+
+  @media (max-width: 700px) {
+    .profile { grid-template-columns: 1fr; gap: 1.3rem; }
+    .portrait { width: 7rem; }
+  }
+</style>

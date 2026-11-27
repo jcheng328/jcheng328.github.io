@@ -2,15 +2,24 @@
 import Site from "../layouts/Site.astro";
 import Paper from "../layouts/Paper.astro";
 import profile from "../data/profile.json";
-const years = [...new Set(profile.papers.map((paper) => paper.year))].sort((a, b) => b - a);
+
+const papers = profile.papers.toSorted((a, b) => b.year - a.year);
+const years = [...new Set(papers.map((paper) => paper.year))];
 ---
 <Site title="Papers">
-  <h1>Papers</h1>
-  {years.length === 0 && <p>No publications are listed here yet.</p>}
-  {years.map((year) => (
-    <section aria-labelledby={`year-${year}`}>
-      <h2 id={`year-${year}`}>{year}</h2>
-      {profile.papers.filter((paper) => paper.year === year).map((paper) => <Paper paper={paper} />)}
-    </section>
-  ))}
+  <div class="bibliography">
+    <h1>Papers</h1>
+    {years.length === 0 && <p>No publications are listed here yet.</p>}
+    {years.map((year) => (
+      <section aria-labelledby={`year-${year}`}>
+        <h2 id={`year-${year}`}>{year}</h2>
+        {papers.filter((paper) => paper.year === year).map((paper) => <Paper paper={paper} />)}
+      </section>
+    ))}
+  </div>
 </Site>
+
+<style>
+  .bibliography { max-width: 44rem; }
+  section { margin-top: 1.7rem; padding-top: .7rem; border-top: 1px solid #dcd6cc; }
+</style>

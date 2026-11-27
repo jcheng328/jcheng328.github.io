@@ -1,5 +1,46 @@
 {
   "name": "Jiahui Cheng",
-  "bio": "",
-  "papers": []
+  "github": "https://github.com/jcheng328",
+  "portrait": "https://avatars.githubusercontent.com/u/29350499?v=4&s=384",
+  "bio": "I completed my PhD in Computational Science and Engineering at Georgia Tech. My doctoral research focused on data-driven discovery of differential equations, binary classification, and dynamical systems.",
+  "dissertation": "https://repository.gatech.edu/entities/publication/be49532c-8d80-499e-b45a-5796f3db551b",
+  "papers": [
+    {
+      "title": "Identification of Differential Equations by Dynamics-Guided Weighted Weak Form with Voting",
+      "authors": "Jiahui Cheng, Sung Ha Kang, Haomin Zhou, and Wenjing Liao",
+      "year": 2026,
+      "date": "2026-05",
+      "venue": "Commun. Comput. Phys.",
+      "url": "https://www.global-sci.com/cicp/article/view/24156",
+      "preprint": "https://arxiv.org/abs/2506.03899",
+      "featured": true
+    },
+    {
+      "title": "Data-Driven Model Reduction using WeldNet: Windowed Encoders for Learning Dynamics",
+      "authors": "Biraj Dahal, Jiahui Cheng, Hao Liu, Rongjie Lai, and Wenjing Liao",
+      "year": 2025,
+      "date": "2025-12",
+      "venue": "arXiv",
+      "url": "https://arxiv.org/abs/2512.11090",
+      "featured": true
+    },
+    {
+      "title": "Deep Neural Networks are Adaptive to Function Regularity and Data Distribution in Approximation and Estimation",
+      "authors": "Hao Liu, Jiahui Cheng, and Wenjing Liao",
+      "year": 2025,
+      "date": "2025-09",
+      "venue": "JMLR",
+      "url": "https://www.jmlr.org/papers/v26/24-1148.html",
+      "featured": true
+    },
+    {
+      "title": "High Dimensional Binary Classification under Label Shift: Phase Transition and Regularization",
+      "authors": "Jiahui Cheng, Minshuo Chen, Hao Liu, Tuo Zhao, and Wenjing Liao",
+      "year": 2023,
+      "venue": "Sampl. Theory Signal Process. Data Anal.",
+      "url": "https://doi.org/10.1007/s43670-023-00071-9",
+      "preprint": "https://arxiv.org/abs/2212.00700",
+      "featured": true
+    }
+  ]
 }
