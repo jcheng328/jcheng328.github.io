@@ -2,7 +2,7 @@
   "name": "Jiahui Cheng",
   "github": "https://github.com/jcheng328",
   "portrait": "https://avatars.githubusercontent.com/u/29350499?v=4&s=384",
-  "bio": "I completed my PhD in Computational Science and Engineering at Georgia Tech. My doctoral research focused on data-driven discovery of differential equations, binary classification, and dynamical systems.",
+  "bio": "I completed my PhD in Computational Science and Engineering at Georgia Tech. My doctoral research focused on data-driven discovery of differential equations, binary classification, and dynamical systems. Before Georgia Tech, I studied computing and applied mathematics at the University of Science and Technology of China.",
   "dissertation": "https://repository.gatech.edu/entities/publication/be49532c-8d80-499e-b45a-5796f3db551b",
   "papers": [
     {
@@ -49,6 +49,7 @@
       "venue": "Inverse Problems",
       "url": "https://doi.org/10.1088/1361-6420/ac37fb",
       "preprint": "https://arxiv.org/abs/2105.02945",
+      "code": "https://github.com/jcheng328/DynamicalSampling",
       "featured": true
     }
   ]

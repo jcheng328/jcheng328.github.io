@@ -4,6 +4,11 @@ const dateLabel = paper.date
   ? new Intl.DateTimeFormat("en", { month: "short", year: "numeric", timeZone: "UTC" })
       .format(new Date(`${paper.date}-01T00:00:00Z`))
   : String(paper.year);
+const links = [
+  { label: "arXiv", url: paper.preprint },
+  { label: "Blog", url: paper.blog },
+  { label: "Code", url: paper.code },
+].filter(({ url }) => url);
 ---
 <article class="paper">
   <div class="paper-meta">
@@ -12,11 +17,11 @@ const dateLabel = paper.date
   <div>
     <a class="paper-title" href={paper.url}>{paper.title}</a>
     {!compact && <p class="paper-authors">{paper.authors}</p>}
-    {!compact && (paper.preprint || paper.blog) && (
+    {!compact && links.length > 0 && (
       <p class="paper-links">
-        {paper.preprint && <a href={paper.preprint}>arXiv</a>}
-        {paper.preprint && paper.blog && " / "}
-        {paper.blog && <a href={paper.blog}>Blog</a>}
+        {links.map(({ label, url }, index) => (
+          <>{index > 0 && " / "}<a href={url}>{label}</a></>
+        ))}
       </p>
     )}
   </div>
