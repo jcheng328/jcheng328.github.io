@@ -41,6 +41,15 @@
       "url": "https://doi.org/10.1007/s43670-023-00071-9",
       "preprint": "https://arxiv.org/abs/2212.00700",
       "featured": true
+    },
+    {
+      "title": "Estimate the spectrum of affine dynamical systems from partial observations of a single trajectory data",
+      "authors": "Jiahui Cheng and Sui Tang",
+      "year": 2022,
+      "venue": "Inverse Problems",
+      "url": "https://doi.org/10.1088/1361-6420/ac37fb",
+      "preprint": "https://arxiv.org/abs/2105.02945",
+      "featured": true
     }
   ]
 }
