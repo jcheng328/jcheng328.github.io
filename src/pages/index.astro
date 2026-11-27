@@ -12,22 +12,33 @@ const selected = profile.papers.filter((paper) => paper.featured).sort((a, b) =>
     <div class="profile-content">
       <h1>{profile.name}</h1>
       <p>{profile.bio}</p>
-      <p>
-        I worked at {profile.industry.employer} in China from {profile.industry.dates},
-        where I contributed to one of the
-        <a href={profile.industry.writeup}>{profile.industry.project}</a>
-        featured in ByteDance's technical write-up.
-      </p>
       <p class="profile-links">
         <a href={profile.github}>GitHub</a>
         <span aria-hidden="true"> / </span>
         <a href={profile.dissertation}>Dissertation</a>
       </p>
+      <section aria-labelledby="research">
+        <h2 id="research">Research</h2>
+        <p>{profile.research.summary}</p>
+        <p><a href={profile.research.scholar}>Google Scholar</a></p>
+      </section>
       {selected.length > 0 && (
         <section aria-labelledby="selected-papers">
           <h2 id="selected-papers">Selected papers</h2>
           {selected.map((paper) => <Paper paper={paper} compact />)}
           <p class="all-papers"><a href={papersUrl}>All papers</a></p>
+        </section>
+      )}
+      {profile.selectedWork.length > 0 && (
+        <section aria-labelledby="selected-work">
+          <h2 id="selected-work">Selected Work</h2>
+          {profile.selectedWork.map((work) => (
+            <article class="work-entry">
+              <h3><a href={work.url}>{work.title}</a></h3>
+              <p class="work-meta">{work.organization} · {work.dates}</p>
+              <p>{work.description}</p>
+            </article>
+          ))}
         </section>
       )}
     </div>
@@ -41,6 +52,9 @@ const selected = profile.papers.filter((paper) => paper.featured).sort((a, b) =>
   .profile-links { margin-top: 1rem; }
   section { margin-top: 2.25rem; --paper-label-width: 4.4rem; }
   .all-papers { margin-top: 1rem; }
+  .work-entry { margin-block: 0 1rem; }
+  .work-entry h3 { margin: 0; font-size: 1rem; font-weight: normal; }
+  .work-entry .work-meta { margin: .15rem 0 .3rem; font-size: .87rem; color: #56514a; }
 
   @media (max-width: 700px) {
     .profile { grid-template-columns: 1fr; gap: 1.3rem; }
